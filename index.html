@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="htmlRoot">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<title>SCRIPTME MC88 — Ready-Made JS Features</title>
+<meta name="description" content="Pick a feature, preview it live, copy or download the code. No JavaScript knowledge required.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#060b09; --ink-2:#0a120f;
+  --glass:rgba(255,255,255,.045); --glass-2:rgba(255,255,255,.075); --glass-hover:rgba(255,255,255,.12);
+  --border:rgba(255,255,255,.09); --border-lite:rgba(255,255,255,.16);
+  --green:#34d399; --green-hi:#6ee7c4; --cyan:#22d3ee; --cyan-hi:#67e8f9;
+  --glow:rgba(52,211,153,.28);
+  --amber:#fbbf24; --danger:#fb7185;
+  --text:#eafbf3; --text-dim:#93a99e; --text-faint:#5c7168;
+  --radius-l:20px; --radius-m:13px; --radius-pill:999px;
+  --shadow-sm:0 8px 26px rgba(0,0,0,.35); --shadow:0 22px 64px rgba(0,0,0,.5);
+  --ease:cubic-bezier(.22,1,.36,1);
+  --f-display:'Space Grotesk',sans-serif; --f-body:'Inter',system-ui,sans-serif; --f-mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--f-body); background:var(--ink); color:var(--text); min-height:100vh; overflow-x:hidden;
+  background-image:
+    radial-gradient(ellipse 750px 500px at 90% -5%, rgba(34,211,238,.10), transparent 55%),
+    radial-gradient(ellipse 700px 550px at 0% 15%, rgba(52,211,153,.10), transparent 55%),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.008) 0px, rgba(255,255,255,.008) 1px, transparent 1px, transparent 26px);
+}
+::selection{background:var(--glow)}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-thumb{background:var(--border-lite);border-radius:10px}
+.glass{background:var(--glass);backdrop-filter:blur(22px) saturate(1.5);-webkit-backdrop-filter:blur(22px) saturate(1.5);border:1px solid var(--border);box-shadow:var(--shadow-sm)}
+
+/* ===== TOPBAR ===== */
+.topbar{position:sticky;top:0;z-index:200;margin:10px 10px 0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-radius:var(--radius-pill)}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand-mark{width:36px;height:36px;border-radius:11px;flex-shrink:0;background:linear-gradient(150deg,var(--green),var(--cyan));display:flex;align-items:center;justify-content:center;font-family:var(--f-mono);font-weight:700;font-size:15px;color:#04140e;box-shadow:0 6px 18px var(--glow)}
+.brand-name{font-family:var(--f-display);font-weight:700;font-size:1.02rem;line-height:1.1}
+.brand-tag{font-size:.6rem;color:var(--text-faint);letter-spacing:.4px;font-family:var(--f-mono)}
+.top-actions{display:flex;gap:6px}
+.btn{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;padding:9px 14px;border-radius:var(--radius-pill);border:1px solid var(--border);background:var(--glass-2);color:var(--text);font-family:var(--f-body);font-weight:600;font-size:.76rem;cursor:pointer;transition:.2s var(--ease)}
+.btn:hover{background:var(--glass-hover);transform:translateY(-1px)}
+.btn:active{transform:scale(.96)}
+.btn-grad{background:linear-gradient(120deg,var(--green),var(--cyan));color:#04140e;border-color:transparent;font-weight:700}
+.btn-grad:hover{box-shadow:0 0 26px var(--glow)}
+.btn-outline{background:transparent;border-color:var(--border-lite)}
+.btn-icon{width:38px;height:38px;padding:0;justify-content:center;border-radius:50%}
+@media(max-width:600px){.btn-label{display:none}}
+
+/* ===== HERO ===== */
+.hero{padding:34px 18px 16px;max-width:1100px;margin:0 auto;text-align:center}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:.66rem;color:var(--green-hi);letter-spacing:.5px;padding:6px 14px;border-radius:var(--radius-pill);border:1px solid rgba(52,211,153,.3);background:rgba(52,211,153,.06);margin-bottom:18px}
+.hero h1{font-family:var(--f-display);font-weight:700;font-size:clamp(1.8rem,6vw,3rem);line-height:1.12;letter-spacing:-.5px;max-width:18ch;margin:0 auto 14px}
+.hero h1 span{background:linear-gradient(120deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{color:var(--text-dim);max-width:54ch;margin:0 auto;font-size:.95rem;line-height:1.65}
+
+/* ===== CATEGORY FILTER ===== */
+.filters{display:flex;gap:6px;overflow-x:auto;padding:10px 12px;margin:16px 12px 0;border-radius:var(--radius-l);scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+.filter-chip{flex:0 0 auto;scroll-snap-align:start;padding:8px 15px;border-radius:var(--radius-pill);border:1px solid var(--border);background:var(--glass-2);color:var(--text-dim);font-size:.72rem;font-weight:700;cursor:pointer;transition:.2s var(--ease);white-space:nowrap;font-family:var(--f-body)}
+.filter-chip.active{background:linear-gradient(120deg,var(--green),var(--cyan));color:#04140e;border-color:transparent}
+.filter-chip:not(.active):hover{border-color:var(--green);color:var(--green-hi)}
+
+/* ===== FEATURE GRID ===== */
+.grid{display:grid;grid-template-columns:1fr;gap:12px;padding:12px;max-width:1400px;margin:0 auto}
+@media(min-width:680px){.grid{grid-template-columns:1fr 1fr}}
+@media(min-width:1080px){.grid{grid-template-columns:1fr 1fr 1fr}}
+
+.card{border-radius:var(--radius-l);padding:16px;display:flex;flex-direction:column;gap:10px;transition:.25s var(--ease);cursor:pointer}
+.card:hover{transform:translateY(-3px);border-color:var(--border-lite)}
+.card-top{display:flex;align-items:center;gap:10px}
+.card-ic{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0;background:var(--glass-2)}
+.card-title{font-weight:700;font-size:.92rem}
+.card-cat{font-size:.62rem;color:var(--text-faint);font-family:var(--f-mono);text-transform:uppercase;letter-spacing:.4px}
+.card-desc{font-size:.79rem;color:var(--text-dim);line-height:1.55;flex:1}
+.card-open{display:flex;align-items:center;gap:5px;font-size:.72rem;font-weight:700;color:var(--green-hi)}
+
+/* ===== DETAIL MODAL ===== */
+.modal{position:fixed;inset:0;z-index:1000;display:none;align-items:flex-end;justify-content:center;background:rgba(3,6,5,.75);backdrop-filter:blur(10px)}
+.modal.active{display:flex}
+@media(min-width:760px){.modal{align-items:center;padding:20px}}
+.modal-card{width:100%;max-width:760px;max-height:90vh;overflow-y:auto;background:var(--ink-2);border:1px solid var(--border-lite);border-radius:24px 24px 0 0;box-shadow:0 -20px 70px rgba(0,0,0,.6);padding:20px 18px calc(22px + env(safe-area-inset-bottom));animation:sheetIn .4s var(--ease)}
+@media(min-width:760px){.modal-card{border-radius:22px;animation:modalIn .35s var(--ease)}}
+@keyframes sheetIn{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes modalIn{from{transform:scale(.94) translateY(20px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.modal-head h3{font-family:var(--f-display);font-weight:700;color:var(--green-hi);font-size:1.1rem;display:flex;align-items:center;gap:8px}
+.modal-close{background:none;border:none;color:var(--text-dim);font-size:1.5rem;cursor:pointer;line-height:1;padding:2px 6px;border-radius:8px;transition:.2s}
+.modal-close:hover{color:var(--text);background:var(--glass)}
+.modal-desc{font-size:.83rem;color:var(--text-dim);line-height:1.6;margin-bottom:14px}
+
+.demo-box{background:#fff;border-radius:var(--radius-m);overflow:hidden;margin-bottom:14px;border:1px solid var(--border)}
+.demo-box iframe{width:100%;height:280px;border:none;display:block}
+
+.tab-row{display:flex;gap:6px;margin-bottom:10px}
+.tab-btn{padding:7px 14px;border-radius:var(--radius-pill);border:1px solid var(--border);background:var(--glass-2);color:var(--text-dim);font-size:.72rem;font-weight:700;cursor:pointer;font-family:var(--f-mono)}
+.tab-btn.active{background:var(--green);color:#04140e;border-color:var(--green)}
+.code-box{display:none;background:#04100b;border:1px solid var(--border);border-radius:var(--radius-m);padding:14px;font-family:var(--f-mono);font-size:.74rem;line-height:1.65;color:#c7f9e5;overflow-x:auto;white-space:pre;max-height:260px}
+.code-box.active{display:block}
+
+.step{padding:10px 0;border-bottom:1px solid var(--border);display:flex;gap:11px}
+.step:last-child{border-bottom:none}
+.step-num{flex-shrink:0;width:24px;height:24px;border-radius:7px;background:var(--glass-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:var(--f-mono);font-size:.66rem;color:var(--green-hi);font-weight:700}
+.step-title{font-weight:700;font-size:.8rem;margin-bottom:2px}
+.step-desc{font-size:.75rem;color:var(--text-dim);line-height:1.55}
+
+.modal-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.modal-actions .btn{flex:1;justify-content:center}
+
+/* ===== MASTER GUIDE MODAL ===== */
+.guide-step{padding:12px 0;border-bottom:1px solid var(--border);display:flex;gap:12px}
+.guide-step:last-child{border-bottom:none}
+
+/* ===== TOAST ===== */
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(14px);z-index:2000;background:var(--ink-2);border:1px solid var(--border-lite);color:var(--text);padding:11px 22px;border-radius:var(--radius-pill);font-size:.82rem;font-weight:600;opacity:0;pointer-events:none;transition:.4s var(--ease);box-shadow:var(--shadow)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ===== FOOTER ===== */
+footer{max-width:1400px;margin:26px auto 18px;padding:16px 18px;text-align:center;font-size:.68rem;color:var(--text-faint)}
+footer a{color:var(--text-faint);text-decoration:none;transition:.2s}
+footer a:hover{color:var(--green-hi)}
+footer .fam{margin-top:8px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+footer .fam a{font-weight:600;color:var(--text-dim)}
+</style>
+</head>
+<body>
+
+<header class="topbar glass">
+  <div class="brand">
+    <div class="brand-mark">&gt;_</div>
+    <div><div class="brand-name">SCRIPTME <span style="color:var(--text-faint);font-weight:500">MC88</span></div><div class="brand-tag">JS FEATURE LIBRARY</div></div>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn-outline" onclick="toggleModal('masterGuide',true)">📖 <span class="btn-label">Guide</span></button>
+  </div>
+</header>
+
+<section class="hero">
+  <span class="hero-eyebrow">● COPY. DOWNLOAD. DONE.</span>
+  <h1>Real <span>JavaScript features</span>, ready to drop in.</h1>
+  <p>Pick a feature below, watch it work live, then copy the code or download it as a file. Every feature comes with a plain-English guide on where it goes and how to use it — no JavaScript knowledge required.</p>
+</section>
+
+<div class="filters glass" id="filters">
+  <button class="filter-chip active" data-filter="all">All features</button>
+  <button class="filter-chip" data-filter="nav">Navigation</button>
+  <button class="filter-chip" data-filter="content">Content</button>
+  <button class="filter-chip" data-filter="interaction">Interaction</button>
+  <button class="filter-chip" data-filter="feedback">Feedback</button>
+</div>
+
+<div class="grid" id="cardGrid"></div>
+
+<!-- MASTER GUIDE -->
+<div class="modal" id="masterGuide">
+  <div class="modal-card">
+    <div class="modal-head"><h3>📖 How SCRIPTME MC88 works</h3><button class="modal-close" onclick="toggleModal('masterGuide',false)">✕</button></div>
+    <div class="guide-step"><div class="step-num">1</div><div><div class="step-title">Browse features</div><div class="step-desc">Every card below is one ready-made feature: a menu, a slider, a popup, an effect.</div></div></div>
+    <div class="guide-step"><div class="step-num">2</div><div><div class="step-title">Open one and watch it live</div><div class="step-desc">Tap a card to see it working in a real preview, plus a plain-English explanation.</div></div></div>
+    <div class="guide-step"><div class="step-num">3</div><div><div class="step-title">Copy or download</div><div class="step-desc">Each feature gives you an HTML piece, a CSS piece and a JS piece. Copy them, or download the whole thing as ready files.</div></div></div>
+    <div class="guide-step"><div class="step-num">4</div><div><div class="step-title">Put it in your project</div><div class="step-desc">Paste the HTML where you want the feature to appear, add the CSS inside a &lt;style&gt; tag (or a linked file), and add the JS just before &lt;/body&gt; inside a &lt;script&gt; tag.</div></div></div>
+    <div class="guide-step"><div class="step-num">5</div><div><div class="step-title">Combine your sites</div><div class="step-desc">Write your text in TFT MC88, style it in STYLEME MC88, then bring it to life here in SCRIPTME MC88.</div></div></div>
+    <button class="btn btn-grad" style="width:100%;justify-content:center;margin-top:8px" onclick="toggleModal('masterGuide',false)">Got it, let's build 🚀</button>
+  </div>
+</div>
+
+<!-- FEATURE DETAIL MODAL -->
+<div class="modal" id="featureModal">
+  <div class="modal-card">
+    <div class="modal-head"><h3 id="fmTitle">Feature</h3><button class="modal-close" onclick="toggleModal('featureModal',false)">✕</button></div>
+    <div class="modal-desc" id="fmDesc"></div>
+    <div class="demo-box"><iframe id="fmFrame" title="Feature preview"></iframe></div>
+    <div class="tab-row">
+      <button class="tab-btn active" data-tab="html" onclick="switchTab('html')">HTML</button>
+      <button class="tab-btn" data-tab="css" onclick="switchTab('css')">CSS</button>
+      <button class="tab-btn" data-tab="js" onclick="switchTab('js')">JS</button>
+      <button class="tab-btn" data-tab="use" onclick="switchTab('use')">How to use</button>
+    </div>
+    <pre class="code-box active" id="code-html"></pre>
+    <pre class="code-box" id="code-css"></pre>
+    <pre class="code-box" id="code-js"></pre>
+    <div class="code-box" id="code-use" style="font-family:var(--f-body)"></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="copyCurrentTab()">📋 Copy this tab</button>
+      <button class="btn btn-grad" onclick="downloadFeature()">💾 Download full file</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer>
+  <div>Copyright: mohamed005cheikh@gmail.com | by MC88</div>
+  <div class="fam">
+    <a href="tft-mc88.html">TFT MC88</a>
+    <a href="styleme-mc88.html">STYLEME MC88</a>
+    <span>SCRIPTME MC88</span>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   FEATURE DATABASE
+============================================================ */
+const FEATURES=[
+{
+  id:'mobile-menu', cat:'nav', icon:'☰', title:'Mobile menu', desc:'A hamburger button that opens a slide-in navigation menu — perfect for phone screens.',
+  html:`<button class="menu-btn" id="menuBtn">☰</button>
+<nav class="side-menu" id="sideMenu">
+  <a href="#">Home</a>
+  <a href="#">About</a>
+  <a href="#">Services</a>
+  <a href="#">Contact</a>
+</nav>
+<div class="menu-overlay" id="menuOverlay"></div>`,
+  css:`.menu-btn{position:fixed;top:16px;left:16px;z-index:50;width:44px;height:44px;border:none;border-radius:10px;background:#0f172a;color:#fff;font-size:20px;cursor:pointer}
+.side-menu{position:fixed;top:0;left:0;height:100%;width:240px;background:#fff;box-shadow:4px 0 24px rgba(0,0,0,.15);transform:translateX(-100%);transition:transform .3s ease;z-index:60;padding:80px 20px 20px;display:flex;flex-direction:column;gap:14px}
+.side-menu.open{transform:translateX(0)}
+.side-menu a{text-decoration:none;color:#0f172a;font-weight:600;font-size:15px}
+.menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:opacity .3s;z-index:55}
+.menu-overlay.open{opacity:1;pointer-events:auto}`,
+  js:`const menuBtn=document.getElementById('menuBtn');
+const sideMenu=document.getElementById('sideMenu');
+const menuOverlay=document.getElementById('menuOverlay');
+menuBtn.addEventListener('click',()=>{
+  sideMenu.classList.toggle('open');
+  menuOverlay.classList.toggle('open');
+});
+menuOverlay.addEventListener('click',()=>{
+  sideMenu.classList.remove('open');
+  menuOverlay.classList.remove('open');
+});`,
+  use:`Paste the HTML anywhere in your &lt;body&gt;. Put the CSS inside a &lt;style&gt; tag in your &lt;head&gt;. Put the JS just before &lt;/body&gt; inside a &lt;script&gt; tag. Change the link text and href values to your own pages.`
+},
+{
+  id:'smooth-scroll', cat:'nav', icon:'⇕', title:'Smooth scroll links', desc:'Clicking a link glides smoothly down the page instead of jumping instantly.',
+  html:`<a href="#section1" class="scroll-link">Go to section</a>
+<div id="section1" style="height:400px;padding-top:40px;">Section content here</div>`,
+  css:`html{scroll-behavior:smooth}
+.scroll-link{color:#2563eb;font-weight:600;text-decoration:none}`,
+  js:`document.querySelectorAll('a[href^="#"]').forEach(link=>{
+  link.addEventListener('click',function(e){
+    e.preventDefault();
+    document.querySelector(this.getAttribute('href'))
+      .scrollIntoView({behavior:'smooth'});
+  });
+});`,
+  use:`Give any element an id (like id="section1"), then link to it with href="#section1". The CSS line alone often does the job — the JS makes it work even on older browsers.`
+},
+{
+  id:'back-to-top', cat:'nav', icon:'↑', title:'Back to top button', desc:'A round button appears once you scroll down, and instantly returns you to the top.',
+  html:`<button class="top-btn" id="topBtn">↑</button>`,
+  css:`.top-btn{position:fixed;bottom:24px;right:24px;width:48px;height:48px;border-radius:50%;border:none;background:#0f172a;color:#fff;font-size:20px;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;box-shadow:0 8px 20px rgba(0,0,0,.2)}
+.top-btn.show{opacity:1;pointer-events:auto}
+.top-btn:hover{transform:translateY(-3px)}`,
+  js:`const topBtn=document.getElementById('topBtn');
+window.addEventListener('scroll',()=>{
+  topBtn.classList.toggle('show', window.scrollY>300);
+});
+topBtn.addEventListener('click',()=>{
+  window.scrollTo({top:0,behavior:'smooth'});
+});`,
+  use:`Paste this once, anywhere. It stays fixed to the screen automatically and only appears after the visitor scrolls 300px down.`
+},
+{
+  id:'tabs', cat:'content', icon:'▭', title:'Tabs switcher', desc:'Click a tab label to instantly swap which content panel is visible.',
+  html:`<div class="tabs">
+  <button class="tab active" data-tab="t1">Tab 1</button>
+  <button class="tab" data-tab="t2">Tab 2</button>
+  <button class="tab" data-tab="t3">Tab 3</button>
+</div>
+<div class="tab-panel active" id="t1">First panel content.</div>
+<div class="tab-panel" id="t2">Second panel content.</div>
+<div class="tab-panel" id="t3">Third panel content.</div>`,
+  css:`.tabs{display:flex;gap:6px;margin-bottom:12px}
+.tab{padding:8px 16px;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc;cursor:pointer;font-weight:600}
+.tab.active{background:#0f172a;color:#fff;border-color:#0f172a}
+.tab-panel{display:none;padding:16px;background:#f8fafc;border-radius:10px}
+.tab-panel.active{display:block}`,
+  js:`document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.tab).classList.add('active');
+  });
+});`,
+  use:`Each button needs data-tab="ID" matching a panel's id. Add as many tab/panel pairs as you like — just keep the data-tab and id values matching.`
+},
+{
+  id:'accordion', cat:'content', icon:'▾', title:'Accordion / FAQ', desc:'Click a question to expand its answer smoothly, and collapse the others.',
+  html:`<div class="accordion">
+  <div class="acc-item">
+    <button class="acc-head">What is this? <span>+</span></button>
+    <div class="acc-body"><p>This is an accordion panel used for FAQs.</p></div>
+  </div>
+  <div class="acc-item">
+    <button class="acc-head">How do I edit it? <span>+</span></button>
+    <div class="acc-body"><p>Just change the text inside each acc-head and acc-body.</p></div>
+  </div>
+</div>`,
+  css:`.acc-item{border:1px solid #e2e8f0;border-radius:10px;margin-bottom:8px;overflow:hidden}
+.acc-head{width:100%;text-align:left;padding:14px 16px;background:#f8fafc;border:none;font-weight:700;cursor:pointer;display:flex;justify-content:space-between}
+.acc-body{max-height:0;overflow:hidden;transition:max-height .3s ease;padding:0 16px}
+.acc-item.open .acc-body{max-height:200px;padding:12px 16px}
+.acc-item.open .acc-head span{transform:rotate(45deg)}
+.acc-head span{transition:transform .2s}`,
+  js:`document.querySelectorAll('.acc-head').forEach(head=>{
+  head.addEventListener('click',()=>{
+    const item=head.parentElement;
+    document.querySelectorAll('.acc-item').forEach(i=>{ if(i!==item) i.classList.remove('open'); });
+    item.classList.toggle('open');
+  });
+});`,
+  use:`Duplicate the .acc-item block for each question. The JS automatically closes the others when you open a new one.`
+},
+{
+  id:'image-slider', cat:'content', icon:'▤', title:'Image slider / carousel', desc:'Swipe or click through a set of images with dots and arrow controls.',
+  html:`<div class="slider" id="slider">
+  <div class="slides">
+    <img src="https://picsum.photos/seed/1/600/300">
+    <img src="https://picsum.photos/seed/2/600/300">
+    <img src="https://picsum.photos/seed/3/600/300">
+  </div>
+  <button class="s-arrow s-prev" id="sPrev">‹</button>
+  <button class="s-arrow s-next" id="sNext">›</button>
+  <div class="s-dots" id="sDots"></div>
+</div>`,
+  css:`.slider{position:relative;overflow:hidden;border-radius:12px}
+.slides{display:flex;transition:transform .4s ease}
+.slides img{width:100%;flex-shrink:0;display:block}
+.s-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.5);color:#fff;border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:18px}
+.s-prev{left:10px}.s-next{right:10px}
+.s-dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:6px}
+.s-dots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.5);cursor:pointer}
+.s-dots span.active{background:#fff}`,
+  js:`const slides=document.querySelector('#slider .slides');
+const imgs=slides.children;
+const dotsWrap=document.getElementById('sDots');
+let idx=0;
+for(let i=0;i<imgs.length;i++){
+  const dot=document.createElement('span');
+  if(i===0)dot.classList.add('active');
+  dot.addEventListener('click',()=>goTo(i));
+  dotsWrap.appendChild(dot);
+}
+function goTo(i){
+  idx=(i+imgs.length)%imgs.length;
+  slides.style.transform='translateX(-'+(idx*100)+'%)';
+  [...dotsWrap.children].forEach((d,j)=>d.classList.toggle('active',j===idx));
+}
+document.getElementById('sNext').addEventListener('click',()=>goTo(idx+1));
+document.getElementById('sPrev').addEventListener('click',()=>goTo(idx-1));
+setInterval(()=>goTo(idx+1),4000);`,
+  use:`Replace the image src values with your own pictures. Add or remove &lt;img&gt; tags freely — dots and arrows update automatically.`
+},
+{
+  id:'modal-popup', cat:'interaction', icon:'▢', title:'Popup / modal window', desc:'A button opens a centered popup box with a dimmed background — closes on the X, outside click, or Escape.',
+  html:`<button class="open-modal-btn" id="openModalBtn">Open popup</button>
+<div class="my-modal" id="myModal">
+  <div class="my-modal-card">
+    <button class="my-modal-close" id="closeModalBtn">✕</button>
+    <h3>Hello!</h3>
+    <p>This is a popup window. Put anything you want inside it.</p>
+  </div>
+</div>`,
+  css:`.open-modal-btn{padding:10px 20px;border-radius:8px;border:none;background:#0f172a;color:#fff;font-weight:600;cursor:pointer}
+.my-modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:100}
+.my-modal.open{display:flex}
+.my-modal-card{background:#fff;padding:28px;border-radius:14px;max-width:360px;width:90%;position:relative}
+.my-modal-close{position:absolute;top:10px;right:14px;background:none;border:none;font-size:18px;cursor:pointer}`,
+  js:`const myModal=document.getElementById('myModal');
+document.getElementById('openModalBtn').addEventListener('click',()=>myModal.classList.add('open'));
+document.getElementById('closeModalBtn').addEventListener('click',()=>myModal.classList.remove('open'));
+myModal.addEventListener('click',e=>{ if(e.target===myModal) myModal.classList.remove('open'); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') myModal.classList.remove('open'); });`,
+  use:`Change the button text and the content inside .my-modal-card. You can have several modals — just give each one a different id and matching open/close buttons.`
+},
+{
+  id:'dark-mode', cat:'interaction', icon:'◐', title:'Dark mode toggle', desc:'A switch that flips the whole page between light and dark, and remembers the choice next visit.',
+  html:`<button class="theme-toggle" id="themeToggle">🌙</button>`,
+  css:`body{transition:background .3s,color .3s}
+body.dark{background:#0f172a;color:#f1f5f9}
+.theme-toggle{position:fixed;top:16px;right:16px;width:44px;height:44px;border-radius:50%;border:none;background:#e2e8f0;font-size:18px;cursor:pointer;z-index:50}
+body.dark .theme-toggle{background:#1e293b}`,
+  js:`const themeToggle=document.getElementById('themeToggle');
+function applyTheme(dark){
+  document.body.classList.toggle('dark',dark);
+  themeToggle.textContent=dark?'☀️':'🌙';
+  localStorage.setItem('site-theme',dark?'dark':'light');
+}
+applyTheme(localStorage.getItem('site-theme')==='dark');
+themeToggle.addEventListener('click',()=>applyTheme(!document.body.classList.contains('dark')));`,
+  use:`Add class="dark" styling for any element you want to change in dark mode (like ".dark .card{...}"). The choice is saved automatically, so it stays on their next visit.`
+},
+{
+  id:'copy-clipboard', cat:'interaction', icon:'⧉', title:'Copy to clipboard button', desc:'One click copies text (like a coupon code or email) and confirms with a small message.',
+  html:`<div class="copy-box">
+  <span id="copyText">DISCOUNT-2026</span>
+  <button class="copy-btn" id="copyBtn">Copy</button>
+</div>`,
+  css:`.copy-box{display:flex;align-items:center;gap:10px;background:#f1f5f9;padding:10px 14px;border-radius:10px;width:fit-content;font-family:monospace}
+.copy-btn{padding:6px 14px;border-radius:8px;border:none;background:#0f172a;color:#fff;font-weight:600;cursor:pointer;font-family:inherit}`,
+  js:`const copyBtn=document.getElementById('copyBtn');
+copyBtn.addEventListener('click',()=>{
+  const text=document.getElementById('copyText').textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    copyBtn.textContent='Copied!';
+    setTimeout(()=>copyBtn.textContent='Copy',1500);
+  });
+});`,
+  use:`Change the text inside #copyText to whatever you want copied — a code, an email, a link. You can reuse this block many times with different ids.`
+},
+{
+  id:'form-validate', cat:'interaction', icon:'✓', title:'Contact form validation', desc:'Checks that name, email and message are filled in properly before letting the form submit.',
+  html:`<form class="my-form" id="myForm">
+  <input type="text" id="fName" placeholder="Your name">
+  <span class="err" id="errName"></span>
+  <input type="email" id="fEmail" placeholder="Your email">
+  <span class="err" id="errEmail"></span>
+  <textarea id="fMsg" placeholder="Your message" rows="4"></textarea>
+  <span class="err" id="errMsg"></span>
+  <button type="submit">Send message</button>
+</form>`,
+  css:`.my-form{display:flex;flex-direction:column;gap:6px;max-width:360px}
+.my-form input,.my-form textarea{padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;font-family:inherit;font-size:14px}
+.my-form button{padding:10px;border:none;border-radius:8px;background:#0f172a;color:#fff;font-weight:700;cursor:pointer;margin-top:6px}
+.err{color:#ef4444;font-size:12px;min-height:14px}`,
+  js:`document.getElementById('myForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  let ok=true;
+  const name=document.getElementById('fName');
+  const email=document.getElementById('fEmail');
+  const msg=document.getElementById('fMsg');
+  document.getElementById('errName').textContent='';
+  document.getElementById('errEmail').textContent='';
+  document.getElementById('errMsg').textContent='';
+  if(name.value.trim().length<2){ document.getElementById('errName').textContent='Please enter your name.'; ok=false; }
+  if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email.value)){ document.getElementById('errEmail').textContent='Please enter a valid email.'; ok=false; }
+  if(msg.value.trim().length<5){ document.getElementById('errMsg').textContent='Message is too short.'; ok=false; }
+  if(ok){ alert('Form looks good! Connect this to your email service to actually send it.'); this.reset(); }
+});`,
+  use:`This checks the fields but does not send the email by itself — for that you would connect a service like Formspree. Change field placeholders to match your own form.`
+},
+{
+  id:'counter-animate', cat:'feedback', icon:'#', title:'Animated number counter', desc:'A number counts up smoothly from 0 to its target the moment it scrolls into view.',
+  html:`<div class="counters">
+  <div class="counter" data-target="250">0</div>
+  <div class="counter" data-target="1200">0</div>
+  <div class="counter" data-target="98">0</div>
+</div>`,
+  css:`.counters{display:flex;gap:20px;justify-content:center}
+.counter{font-size:34px;font-weight:800;color:#0f172a}`,
+  js:`const counters=document.querySelectorAll('.counter');
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      const el=entry.target;
+      const target=+el.dataset.target;
+      let count=0;
+      const step=Math.max(1,Math.ceil(target/60));
+      const tick=()=>{
+        count=Math.min(count+step,target);
+        el.textContent=count;
+        if(count<target) requestAnimationFrame(tick);
+      };
+      tick();
+      observer.unobserve(el);
+    }
+  });
+},{threshold:0.4});
+counters.forEach(c=>observer.observe(c));`,
+  use:`Set data-target="NUMBER" on any element to the value you want it to count to. It only plays once, when it scrolls into view.`
+},
+{
+  id:'scroll-reveal', cat:'feedback', icon:'↧', title:'Scroll reveal animation', desc:'Sections fade and slide into place as the visitor scrolls down the page.',
+  html:`<div class="reveal">Section one fades in.</div>
+<div class="reveal">Section two fades in.</div>
+<div class="reveal">Section three fades in.</div>`,
+  css:`.reveal{opacity:0;transform:translateY(40px);transition:opacity .7s ease,transform .7s ease;padding:24px;background:#f8fafc;border-radius:12px;margin-bottom:14px}
+.reveal.visible{opacity:1;transform:translateY(0)}`,
+  js:`const revealEls=document.querySelectorAll('.reveal');
+const revealObserver=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){ entry.target.classList.add('visible'); revealObserver.unobserve(entry.target); }
+  });
+},{threshold:0.15});
+revealEls.forEach(el=>revealObserver.observe(el));`,
+  use:`Add the class "reveal" to any section, card or image you want to animate in as the visitor scrolls. Works on as many elements as you like.`
+},
+{
+  id:'toast-notify', cat:'feedback', icon:'◇', title:'Toast notifications', desc:'Small confirmation messages that appear briefly at the bottom of the screen, then fade away.',
+  html:`<button class="toast-demo-btn" id="toastDemoBtn">Show notification</button>
+<div class="my-toast" id="myToast"></div>`,
+  css:`.my-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#0f172a;color:#fff;padding:12px 24px;border-radius:999px;font-weight:600;opacity:0;pointer-events:none;transition:.3s ease}
+.my-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast-demo-btn{padding:10px 20px;border-radius:8px;border:none;background:#0f172a;color:#fff;font-weight:600;cursor:pointer}`,
+  js:`function showMyToast(msg){
+  const el=document.getElementById('myToast');
+  el.textContent=msg;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),2400);
+}
+document.getElementById('toastDemoBtn').addEventListener('click',()=>showMyToast('Saved successfully ✅'));`,
+  use:`Call showMyToast("your message") anywhere in your own code — for example after a form submits or a button is clicked.`
+},
+{
+  id:'typing-effect', cat:'feedback', icon:'▏', title:'Typewriter text effect', desc:'Text types itself out letter by letter, like someone typing live on the page.',
+  html:`<h2 class="typewriter" id="typeTarget"></h2>`,
+  css:`.typewriter{font-family:monospace;border-right:2px solid #0f172a;white-space:nowrap;overflow:hidden;display:inline-block}`,
+  js:`const typeTarget=document.getElementById('typeTarget');
+const phrases=['Build without code.','Learn by doing.','Made with SCRIPTME MC88.'];
+let pIndex=0,cIndex=0,deleting=false;
+function typeLoop(){
+  const current=phrases[pIndex];
+  cIndex+=deleting?-1:1;
+  typeTarget.textContent=current.slice(0,cIndex);
+  let delay=deleting?40:90;
+  if(!deleting&&cIndex===current.length){ delay=1400; deleting=true; }
+  else if(deleting&&cIndex===0){ deleting=false; pIndex=(pIndex+1)%phrases.length; delay=400; }
+  setTimeout(typeLoop,delay);
+}
+typeLoop();`,
+  use:`Edit the "phrases" list to your own lines of text. It will keep cycling through them forever.`
+}
+];
+
+/* ============================================================
+   RENDER GRID
+============================================================ */
+const grid=document.getElementById('cardGrid');
+function renderGrid(filter){
+  grid.innerHTML='';
+  FEATURES.filter(f=>filter==='all'||f.cat===filter).forEach(f=>{
+    const card=document.createElement('div');
+    card.className='card glass';
+    card.innerHTML=`<div class="card-top"><div class="card-ic">${f.icon}</div><div><div class="card-title">${f.title}</div><div class="card-cat">${f.cat}</div></div></div>
+    <div class="card-desc">${f.desc}</div><div class="card-open">Open feature →</div>`;
+    card.addEventListener('click',()=>openFeature(f.id));
+    grid.appendChild(card);
+  });
+}
+document.querySelectorAll('.filter-chip').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active');
+    renderGrid(chip.dataset.filter);
+  });
+});
+renderGrid('all');
+
+/* ============================================================
+   FEATURE MODAL
+============================================================ */
+let currentFeature=null, currentTab='html';
+
+function openFeature(id){
+  currentFeature=FEATURES.find(f=>f.id===id);
+  document.getElementById('fmTitle').textContent=currentFeature.icon+' '+currentFeature.title;
+  document.getElementById('fmDesc').textContent=currentFeature.desc;
+  document.getElementById('code-html').textContent=currentFeature.html;
+  document.getElementById('code-css').textContent=currentFeature.css;
+  document.getElementById('code-js').textContent=currentFeature.js;
+  document.getElementById('code-use').innerHTML=currentFeature.use;
+  renderDemo();
+  switchTab('html');
+  toggleModal('featureModal',true);
+}
+
+function renderDemo(){
+  const frame=document.getElementById('fmFrame');
+  const doc=frame.contentDocument||frame.contentWindow.document;
+  doc.open();
+  doc.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
+  body{font-family:'Inter',system-ui,sans-serif;margin:0;padding:20px;color:#0f172a;background:#fff}
+  ${currentFeature.css}
+  </style></head><body>${currentFeature.html}<script>${currentFeature.js}<\/script></body></html>`);
+  doc.close();
+}
+
+function switchTab(tab){
+  currentTab=tab;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+  document.querySelectorAll('.code-box').forEach(b=>b.classList.remove('active'));
+  document.getElementById('code-'+tab).classList.add('active');
+}
+
+function copyCurrentTab(){
+  const el=document.getElementById('code-'+currentTab);
+  const text=currentTab==='use'?el.textContent:el.textContent;
+  navigator.clipboard.writeText(text).then(()=>showToast('📋 Copied to clipboard')).catch(()=>showToast('⚠️ Could not copy'));
+}
+
+function downloadFeature(){
+  const f=currentFeature;
+  const fullDoc=`<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${f.title} — made with SCRIPTME MC88</title>
+<style>
+body{font-family:'Inter',system-ui,sans-serif;margin:0;padding:24px;color:#0f172a;background:#fff}
+${f.css}
+</style>
+</head>
+<body>
+${f.html}
+<script>
+${f.js}
+<\/script>
+<!-- Copyright: mohamed005cheikh@gmail.com | by MC88 -->
+</body>
+</html>`;
+  const blob=new Blob([fullDoc],{type:'text/html;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download=`${f.id}-mc88.html`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  showToast('💾 Feature downloaded');
+}
+
+/* ============================================================
+   MODAL / TOAST HELPERS
+============================================================ */
+function toggleModal(id,show){
+  document.getElementById(id).classList.toggle('active',show);
+  document.body.style.overflow=show?'hidden':'';
+}
+document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)toggleModal(m.id,false)}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal.active').forEach(m=>toggleModal(m.id,false))});
+
+const toast=document.getElementById('toast'); let toastTimer=null;
+function showToast(msg){
+  toast.textContent=msg; toast.classList.add('show');
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>toast.classList.remove('show'),2400);
+}
+</script>
+</body>
+</html>
