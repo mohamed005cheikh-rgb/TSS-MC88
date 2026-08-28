@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="htmlRoot">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<title>STYLEME MC88 — Visual CSS Studio</title>
+<meta name="description" content="Point, tap, style. Design real CSS without writing a line of code.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0b0714; --ink-2:#120b20;
+  --glass:rgba(255,255,255,.05); --glass-2:rgba(255,255,255,.08); --glass-hover:rgba(255,255,255,.13);
+  --border:rgba(255,255,255,.1); --border-lite:rgba(255,255,255,.17);
+  --violet:#a78bfa; --violet-hi:#c4b5fd; --magenta:#f472b6; --magenta-hi:#f9a8d4;
+  --grad:linear-gradient(135deg,var(--violet),var(--magenta));
+  --glow:rgba(167,139,250,.3);
+  --teal:#5eead4;
+  --danger:#fb7185;
+  --text:#f2eefb; --text-dim:#a99fc0; --text-faint:#6f6488;
+  --radius-l:22px; --radius-m:14px; --radius-pill:999px;
+  --shadow-sm:0 8px 28px rgba(0,0,0,.35);
+  --shadow:0 24px 70px rgba(0,0,0,.5);
+  --ease:cubic-bezier(.22,1,.36,1);
+  --f-display:'Sora',sans-serif; --f-body:'Inter',system-ui,sans-serif; --f-mono:'JetBrains Mono',monospace;
+  --safe-b:env(safe-area-inset-bottom,10px);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;user-select:none}
+html,body{height:100%}
+body{
+  font-family:var(--f-body); background:var(--ink); color:var(--text); overflow:hidden;
+  display:flex; flex-direction:column; height:100dvh;
+  background-image:
+    radial-gradient(ellipse 700px 500px at 100% 0%, rgba(244,114,182,.12), transparent 55%),
+    radial-gradient(ellipse 700px 600px at -10% 100%, rgba(167,139,250,.13), transparent 55%);
+}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-thumb{background:var(--border-lite);border-radius:10px}
+
+.glass{background:var(--glass); backdrop-filter:blur(22px) saturate(1.5); -webkit-backdrop-filter:blur(22px) saturate(1.5); border:1px solid var(--border)}
+
+/* ===== TOPBAR ===== */
+.topbar{
+  flex-shrink:0; display:flex; align-items:center; justify-content:space-between; gap:8px;
+  margin:8px 8px 0; padding:9px 12px; border-radius:var(--radius-pill); box-shadow:var(--shadow-sm); z-index:150;
+}
+.brand{display:flex; align-items:center; gap:9px; min-width:0}
+.brand-mark{width:34px;height:34px;border-radius:10px;flex-shrink:0;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 6px 18px var(--glow)}
+.brand-name{font-family:var(--f-display);font-weight:700;font-size:.98rem;line-height:1.1}
+.brand-tag{font-size:.6rem;color:var(--text-faint);letter-spacing:.4px}
+.actions{display:flex;gap:5px;flex-shrink:0}
+
+.btn{display:inline-flex;align-items:center;gap:5px;padding:8px 12px;border-radius:var(--radius-pill);border:1px solid var(--border);background:var(--glass-2);color:var(--text);font-weight:600;font-size:.72rem;cursor:pointer;transition:.2s var(--ease);white-space:nowrap;font-family:var(--f-body)}
+.btn:hover{background:var(--glass-hover);transform:translateY(-1px)}
+.btn:active{transform:scale(.95)}
+.btn-grad{background:var(--grad);color:#1a0a24;border-color:transparent;font-weight:700}
+.btn-grad:hover{box-shadow:0 0 24px var(--glow)}
+.btn-icon{width:36px;height:36px;padding:0;justify-content:center;border-radius:50%}
+@media(max-width:600px){.btn-label{display:none}}
+
+/* ===== CANVAS ===== */
+.canvas-wrap{flex:1;min-height:0;display:flex;justify-content:center;padding:8px;overflow-y:auto}
+.canvas{
+  width:100%;max-width:720px;border-radius:var(--radius-l);overflow:hidden;
+  box-shadow:var(--shadow);border:1px solid var(--border);background:#fff;position:relative;min-height:100%;
+}
+.canvas iframe{width:100%;height:100%;min-height:640px;border:none;display:block;background:#fff}
+
+.bbox{position:fixed;pointer-events:none;z-index:5000;border:2px solid var(--violet);background:rgba(167,139,250,.08);border-radius:6px;display:none;transition:all .08s linear}
+.bbox-tag{position:absolute;top:-23px;left:-2px;background:var(--grad);color:#1a0a24;font-family:var(--f-mono);font-size:9px;font-weight:700;padding:3px 8px;border-radius:6px 6px 6px 0}
+
+/* ===== BOTTOM NAV ===== */
+.bottom-nav{
+  flex-shrink:0;display:flex;justify-content:space-around;align-items:center;
+  margin:0 8px; padding:8px 4px calc(8px + var(--safe-b));
+  border-radius:22px 22px 0 0; box-shadow:0 -10px 30px rgba(0,0,0,.3); z-index:150;
+}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;color:var(--text-dim);font-size:.62rem;font-weight:600;padding:6px 0;width:58px;cursor:pointer;font-family:var(--f-body)}
+.nav-btn:active{transform:scale(.92)}
+.nav-btn .ic{font-size:19px}
+.nav-btn.active{color:var(--violet-hi)}
+
+/* ===== SHEETS ===== */
+.overlay{position:fixed;inset:0;background:rgba(4,2,8,.65);backdrop-filter:blur(8px);z-index:900;opacity:0;pointer-events:none;transition:opacity .25s}
+.overlay.active{opacity:1;pointer-events:auto}
+.sheet{
+  position:fixed;bottom:0;left:0;width:100%;background:var(--ink-2);border:1px solid var(--border-lite);
+  border-radius:24px 24px 0 0;box-shadow:0 -16px 50px rgba(0,0,0,.5);z-index:901;
+  transform:translateY(100%);transition:transform .4s var(--ease);max-height:70vh;overflow-y:auto;
+  padding:16px 16px calc(18px + var(--safe-b));
+}
+.sheet.active{transform:translateY(0)}
+.sheet-handle{width:38px;height:4px;background:var(--border-lite);border-radius:10px;margin:0 auto 14px}
+.sheet-title{font-family:var(--f-display);font-weight:700;font-size:1rem;margin-bottom:16px;text-align:center;color:var(--violet-hi)}
+.row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.row label{font-size:.75rem;color:var(--text-dim);width:74px;flex-shrink:0}
+.row .val{font-size:.65rem;font-family:var(--f-mono);color:var(--teal);width:44px;text-align:right}
+input[type="range"]{-webkit-appearance:none;appearance:none;flex:1;height:5px;border-radius:3px;background:var(--border-lite);outline:none}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:19px;height:19px;border-radius:50%;background:var(--grad);border:2px solid #fff;cursor:grab;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+input[type="color"]{width:40px;height:32px;border-radius:8px;border:1px solid var(--border);background:none;cursor:pointer}
+.swatch-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:10px 0}
+.swatch{aspect-ratio:1;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:.2s}
+.swatch:active{transform:scale(1.25);border-color:var(--violet-hi)}
+.anim-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:10px 0}
+.anim-card{padding:10px 3px;background:var(--glass-2);border:1px solid var(--border);border-radius:12px;text-align:center;cursor:pointer;transition:.2s;font-size:.62rem;font-weight:600}
+.anim-card:active{border-color:var(--violet-hi);background:var(--glass-hover)}
+.align-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+
+/* ===== GUIDE ===== */
+.step{padding:11px 0;border-bottom:1px solid var(--border);display:flex;gap:11px}
+.step:last-child{border-bottom:none}
+.step-num{flex-shrink:0;width:25px;height:25px;border-radius:8px;background:var(--glass-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:var(--f-mono);font-size:.68rem;color:var(--violet-hi);font-weight:700}
+.step-title{font-weight:700;font-size:.83rem;margin-bottom:3px}
+.step-desc{font-size:.77rem;color:var(--text-dim);line-height:1.6}
+.step-code{display:block;margin-top:6px;font-family:var(--f-mono);font-size:.7rem;color:var(--teal);background:rgba(0,0,0,.3);border:1px solid var(--border);padding:6px 10px;border-radius:8px;overflow-x:auto;white-space:nowrap}
+
+/* ===== TOAST ===== */
+.toast-wrap{position:fixed;bottom:96px;left:50%;transform:translateX(-50%);z-index:3000;display:flex;flex-direction:column;gap:6px;pointer-events:none}
+.toast{padding:9px 18px;border-radius:var(--radius-pill);font-weight:600;font-size:.76rem;color:#1a0a24;box-shadow:var(--shadow-sm);animation:tin .35s var(--ease)}
+.toast.ok{background:var(--teal)} .toast.info{background:var(--violet-hi)}
+@keyframes tin{from{opacity:0;transform:translateY(12px) scale(.9)}to{opacity:1;transform:translateY(0) scale(1)}}
+</style>
+</head>
+<body>
+
+<header class="topbar glass">
+  <div class="brand">
+    <div class="brand-mark">🎨</div>
+    <div><div class="brand-name">STYLEME <span style="color:var(--text-faint);font-weight:500">MC88</span></div><div class="brand-tag">VISUAL CSS STUDIO</div></div>
+  </div>
+  <div class="actions">
+    <button class="btn" onclick="openSheet('guideSheet')">📖 <span class="btn-label">Guide</span></button>
+    <button class="btn" onclick="openImportPrompt()">📄 <span class="btn-label">Import</span></button>
+    <button class="btn btn-grad" onclick="downloadCSS()">💾 <span class="btn-label">Export</span></button>
+  </div>
+</header>
+
+<div class="canvas-wrap">
+  <div class="canvas"><iframe id="previewFrame" title="Live preview"></iframe></div>
+</div>
+
+<nav class="bottom-nav glass">
+  <button class="nav-btn" onclick="undo()"><span class="ic">↩️</span>Undo</button>
+  <button class="nav-btn" onclick="openSheet('colorSheet')"><span class="ic">🎨</span>Color</button>
+  <button class="nav-btn" onclick="openSheet('effectSheet')"><span class="ic">✨</span>Effects</button>
+  <button class="nav-btn" onclick="openSheet('textSheet')"><span class="ic">🔤</span>Text</button>
+  <button class="nav-btn" onclick="openSheet('pageSheet')"><span class="ic">📄</span>Page</button>
+</nav>
+
+<div class="overlay" id="overlay" onclick="closeSheet()"></div>
+
+<!-- GUIDE -->
+<div class="sheet" id="guideSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title">📖 How STYLEME MC88 works</div>
+  <div class="step"><div class="step-num">1</div><div><div class="step-title">Tap any element</div><div class="step-desc">Tap directly on anything inside the preview above. A frame highlights it — that's now selected.</div></div></div>
+  <div class="step"><div class="step-num">2</div><div><div class="step-title">Style it</div><div class="step-desc">Use Color, Effects, Text or Page at the bottom to change it instantly. No two elements ever clash — each gets its own unique ID automatically.</div></div></div>
+  <div class="step"><div class="step-num">3</div><div><div class="step-title">Export your CSS</div><div class="step-desc">Tap "Export" to download <b>styleme-export.css</b>.</div></div></div>
+  <div class="step"><div class="step-num">4</div><div><div class="step-title">Connect it to your HTML</div><div class="step-desc">Put the downloaded file in your project folder, then add this line inside your page's &lt;head&gt;:</div><span class="step-code">&lt;link rel="stylesheet" href="styleme-export.css"&gt;</span></div></div>
+  <div class="step"><div class="step-num">5</div><div><div class="step-title">Bring your own page</div><div class="step-desc">Tap "Import" to paste HTML you made with TFT MC88, then style it here.</div></div></div>
+  <button class="btn btn-grad" style="width:100%;justify-content:center;margin-top:10px" onclick="closeSheet()">Got it, let's design 🚀</button>
+</div>
+
+<!-- COLOR -->
+<div class="sheet" id="colorSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title">🎨 Choose a color</div>
+  <div class="swatch-grid" id="quickSwatches"></div>
+  <div class="row"><label>Background</label><input type="color" id="bgColorPicker" value="#ffffff" oninput="applyStyleDirect('backgroundColor', this.value)"></div>
+  <div class="row"><label>Text color</label><input type="color" id="textColorPicker" value="#000000" oninput="applyStyleDirect('color', this.value)"></div>
+</div>
+
+<!-- EFFECTS -->
+<div class="sheet" id="effectSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title">✨ Quick effects</div>
+  <div class="row"><label>Rounding</label><input type="range" id="borderRadius" min="0" max="80" value="0" oninput="applyStyleDirect('borderRadius', this.value + 'px')"><span class="val" id="borderRadiusValue">0px</span></div>
+  <div class="row"><label>Shadow X</label><input type="range" id="shadowX" min="-20" max="20" value="0" oninput="updateShadow()"><span class="val" id="shadowXVal">0</span></div>
+  <div class="row"><label>Shadow Y</label><input type="range" id="shadowY" min="-20" max="20" value="4" oninput="updateShadow()"><span class="val" id="shadowYVal">4</span></div>
+  <div class="row"><label>Blur</label><input type="range" id="shadowBlur" min="0" max="30" value="8" oninput="updateShadow()"><span class="val" id="shadowBlurVal">8</span></div>
+  <div class="row"><label>Opacity</label><input type="range" id="opacitySlider" min="0" max="1" step="0.05" value="1" oninput="applyStyleDirect('opacity', this.value)"><span class="val" id="opacityVal">1</span></div>
+  <div style="margin-top:14px;font-weight:700;font-size:.78rem;margin-bottom:6px">🎬 Ready-made animations</div>
+  <div class="anim-grid" id="animationsGrid"></div>
+  <button class="btn" onclick="removeAnimation()" style="width:100%;margin-top:8px;border-color:var(--danger);color:var(--danger)">🗑 Remove animation</button>
+</div>
+
+<!-- TEXT -->
+<div class="sheet" id="textSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title">🔤 Text formatting</div>
+  <div class="row"><label>Size</label><input type="range" id="fontSize" min="8" max="80" value="16" oninput="applyStyleDirect('fontSize', this.value + 'px')"><span class="val" id="fontSizeVal">16px</span></div>
+  <div class="row"><label>Weight</label><input type="range" id="fontWeight" min="300" max="900" step="100" value="400" oninput="applyStyleDirect('fontWeight', this.value)"><span class="val" id="fontWeightVal">400</span></div>
+  <div class="align-row">
+    <button class="btn" onclick="applyStyleDirect('textAlign','left')">⬅ Left</button>
+    <button class="btn" onclick="applyStyleDirect('textAlign','center')">◉ Center</button>
+    <button class="btn" onclick="applyStyleDirect('textAlign','right')">➡ Right</button>
+  </div>
+</div>
+
+<!-- PAGE -->
+<div class="sheet" id="pageSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title">📄 Page settings</div>
+  <div class="row"><label>Background</label><input type="color" id="pageBgColor" value="#f8fafc" oninput="applyToBody('backgroundColor', this.value)"></div>
+  <div class="row"><label>Text color</label><input type="color" id="pageTextColor" value="#0f172a" oninput="applyToBody('color', this.value)"></div>
+  <div class="row"><label>Padding</label><input type="range" id="pagePadding" min="0" max="60" value="20" oninput="applyToBody('padding', this.value + 'px')"><span class="val" id="pagePaddingVal">20px</span></div>
+  <button class="btn" style="width:100%;margin-top:8px" onclick="applyToBody('background','');applyToBody('color','');applyToBody('padding','');showToast('Page reset','info')">🔄 Reset page</button>
+</div>
+
+<div class="toast-wrap" id="toastContainer"></div>
+
+<script>
+(function(){
+"use strict";
+const previewFrame=document.getElementById('previewFrame');
+let selectedElement=null, history=[], historyIndex=-1, autosaveTimer;
+
+const quickColors=['#000000','#ffffff','#ef4444','#f97316','#f59e0b','#84cc16','#22c55e','#10b981','#06b6d4','#3b82f6','#6366f1','#a78bfa','#c084fc','#d946ef','#ec4899','#f43f5e','#78716c','#fbbf24','#a3e635','#5eead4','#f472b6','#818cf8','#fb923c','#2dd4bf'];
+
+const animations=[
+  {id:'fadeIn',name:'Fade',icon:'👁️'},{id:'slideUp',name:'Slide up',icon:'⬆️'},
+  {id:'bounce',name:'Bounce',icon:'🏀'},{id:'shake',name:'Shake',icon:'📳'},
+  {id:'pulse',name:'Pulse',icon:'💓'},{id:'flip',name:'Flip',icon:'🔄'},
+  {id:'rotate',name:'Rotate',icon:'🌀'},{id:'zoomIn',name:'Zoom in',icon:'🔍'},
+  {id:'swing',name:'Swing',icon:'🎭'},{id:'wobble',name:'Wobble',icon:'🍃'},
+  {id:'heartBeat',name:'Heartbeat',icon:'💗'},{id:'rubberBand',name:'Elastic',icon:'🪀'},
+  {id:'jello',name:'Jello',icon:'🍮'},{id:'flash',name:'Flash',icon:'💡'},
+  {id:'glowPulse',name:'Glow',icon:'✨'}
+];
+
+function getFrameDoc(){return previewFrame.contentDocument||previewFrame.contentWindow.document}
+function ensureUniqueId(el){if(!el.hasAttribute('data-sm-id'))el.setAttribute('data-sm-id','sm-'+Math.random().toString(36).substr(2,8))}
+function getUniqueSelector(el){ensureUniqueId(el);return '[data-sm-id="'+el.getAttribute('data-sm-id')+'"]'}
+function sanitizeHTML(html){const doc=new DOMParser().parseFromString(html,'text/html');doc.querySelectorAll('script,[onclick],[onerror],[onload],[onmouseover]').forEach(el=>el.remove());return doc.body.innerHTML}
+
+function buildDemoSite(){
+  const doc=getFrameDoc();
+  doc.open();
+  doc.write(`<!DOCTYPE html><html><head><style>
+  *{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter','Sora',sans-serif;line-height:1.8;color:#0f172a;background:#f8fafc;padding:20px;max-width:500px;margin:0 auto}
+  h1{font-size:28px;text-align:center;margin-bottom:16px}p{margin-bottom:14px;color:#475569;text-align:center}
+  .card{background:#fff;border-radius:14px;padding:24px;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,.06);margin:16px 0}
+  button{background:#7c3aed;color:#fff;border:none;padding:12px 28px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:600;display:block;width:100%;margin:8px 0}
+  .highlight-box{background:#f5f3ff;border:1px solid #ddd6fe;border-radius:12px;padding:16px;margin:16px 0;text-align:center}
+  </style></head><body>
+  <h1>🎨 Welcome to STYLEME MC88</h1>
+  <p>Tap "Guide" to learn how to connect files, or tap any element right now to start styling!</p>
+  <div class="highlight-box"><strong>💡 Sample box</strong></div>
+  <div class="card"><h3>🖌️ Sample card</h3><p>This is text inside a card.</p></div>
+  <button>Sample button</button>
+  </body></html>`);
+  doc.close();
+  injectAnimations(doc); assignAllIds(doc); attachInspector(doc); restoreAutosave(doc);
+}
+
+function injectAnimations(doc){
+  const style=doc.createElement('style');
+  style.textContent=`
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  @keyframes slideUp{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
+  @keyframes bounce{0%,20%,50%,80%,100%{transform:translateY(0)}40%{transform:translateY(-30px)}60%{transform:translateY(-15px)}}
+  @keyframes shake{0%,100%{transform:translateX(0)}10%,30%,50%,70%,90%{transform:translateX(-10px)}20%,40%,60%,80%{transform:translateX(10px)}}
+  @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
+  @keyframes flip{from{transform:perspective(400px) rotateY(-360deg)}to{transform:perspective(400px) rotateY(0)}}
+  @keyframes rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+  @keyframes zoomIn{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:scale(1)}}
+  @keyframes swing{20%{transform:rotate(15deg)}40%{transform:rotate(-10deg)}60%{transform:rotate(5deg)}80%{transform:rotate(-5deg)}to{transform:rotate(0)}}
+  @keyframes wobble{from{transform:translateX(0)}15%{transform:translateX(-25%) rotate(-5deg)}30%{transform:translateX(20%) rotate(3deg)}45%{transform:translateX(-15%) rotate(-3deg)}60%{transform:translateX(10%) rotate(2deg)}75%{transform:translateX(-5%) rotate(-1deg)}to{transform:translateX(0)}}
+  @keyframes heartBeat{0%{transform:scale(1)}14%{transform:scale(1.3)}28%{transform:scale(1)}42%{transform:scale(1.3)}70%{transform:scale(1)}}
+  @keyframes rubberBand{from{transform:scale3d(1,1,1)}30%{transform:scale3d(1.25,.75,1)}40%{transform:scale3d(.75,1.25,1)}50%{transform:scale3d(1.15,.85,1)}65%{transform:scale3d(.95,1.05,1)}75%{transform:scale3d(1.05,.95,1)}to{transform:scale3d(1,1,1)}}
+  @keyframes jello{from,11.1%,to{transform:translate3d(0,0,0)}22.2%{transform:skewX(-12.5deg) skewY(-12.5deg)}33.3%{transform:skewX(6.25deg) skewY(6.25deg)}44.4%{transform:skewX(-3.125deg) skewY(-3.125deg)}55.5%{transform:skewX(1.5625deg) skewY(1.5625deg)}66.6%{transform:skewX(-.78125deg) skewY(-.78125deg)}77.7%{transform:skewX(.390625deg) skewY(.390625deg)}88.8%{transform:skewX(-.1953125deg) skewY(-.1953125deg)}}
+  @keyframes flash{from,50%,to{opacity:1}25%,75%{opacity:0}}
+  @keyframes glowPulse{0%{box-shadow:0 0 5px rgba(124,58,237,.4)}50%{box-shadow:0 0 25px rgba(124,58,237,.8),0 0 50px rgba(124,58,237,.4)}100%{box-shadow:0 0 5px rgba(124,58,237,.4)}}
+  `;
+  doc.head.appendChild(style);
+}
+
+function assignAllIds(doc){doc.querySelectorAll('*').forEach(el=>ensureUniqueId(el))}
+
+function attachInspector(doc){
+  const observer=new MutationObserver(()=>{doc.querySelectorAll('*:not([data-sm-id])').forEach(el=>ensureUniqueId(el))});
+  observer.observe(doc.body,{childList:true,subtree:true});
+  doc.body.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();selectElement(e.target===doc.body?doc.body:e.target)},true);
+}
+
+let bboxSelected;
+function ensureBBox(){if(!bboxSelected){bboxSelected=document.createElement('div');bboxSelected.className='bbox';bboxSelected.innerHTML='<span class="bbox-tag"></span>';document.body.appendChild(bboxSelected)}}
+function updateBBox(el){
+  ensureBBox();
+  const r=el.getBoundingClientRect(),fr=previewFrame.getBoundingClientRect();
+  bboxSelected.style.display='block';
+  bboxSelected.style.left=(fr.left+r.left)+'px'; bboxSelected.style.top=(fr.top+r.top)+'px';
+  bboxSelected.style.width=r.width+'px'; bboxSelected.style.height=r.height+'px';
+  bboxSelected.querySelector('.bbox-tag').textContent='<'+el.tagName.toLowerCase()+'>';
+}
+function hideBBox(){if(bboxSelected)bboxSelected.style.display='none'}
+
+function selectElement(el){selectedElement=el; if(!el){hideBBox();return} updateBBox(el); syncSheetControls(el)}
+
+function syncSheetControls(el){
+  const cs=getFrameDoc().defaultView.getComputedStyle(el);
+  document.getElementById('borderRadius').value=parseInt(cs.borderRadius)||0;
+  document.getElementById('borderRadiusValue').textContent=(parseInt(cs.borderRadius)||0)+'px';
+  document.getElementById('fontSize').value=parseInt(cs.fontSize)||16;
+  document.getElementById('fontSizeVal').textContent=(parseInt(cs.fontSize)||16)+'px';
+  document.getElementById('fontWeight').value=parseInt(cs.fontWeight)||400;
+  document.getElementById('fontWeightVal').textContent=parseInt(cs.fontWeight)||400;
+  document.getElementById('opacitySlider').value=cs.opacity||1;
+  document.getElementById('opacityVal').textContent=cs.opacity||1;
+  document.getElementById('bgColorPicker').value=rgb2hex(cs.backgroundColor);
+  document.getElementById('textColorPicker').value=rgb2hex(cs.color);
+  if(el===getFrameDoc().body){
+    document.getElementById('pageBgColor').value=rgb2hex(cs.backgroundColor);
+    document.getElementById('pageTextColor').value=rgb2hex(cs.color);
+    document.getElementById('pagePadding').value=parseInt(cs.padding)||20;
+    document.getElementById('pagePaddingVal').textContent=(parseInt(cs.padding)||20)+'px';
+  }
+}
+
+function setStyle(el,prop,value){
+  if(!el)return;
+  const before=el.style.cssText; el.style[prop]=value;
+  if(before!==el.style.cssText){
+    history=history.slice(0,historyIndex+1);
+    history.push({el,before,after:el.style.cssText}); historyIndex=history.length-1;
+    scheduleAutosave();
+  }
+}
+function undo(){
+  if(historyIndex<0)return showToast('Nothing to undo','info');
+  history[historyIndex].el.style.cssText=history[historyIndex].before; historyIndex--;
+  showToast('↩️ Undone','info');
+}
+function applyStyleDirect(prop,value){if(!selectedElement){showToast('Select an element first','info');return} setStyle(selectedElement,prop,value)}
+function applyToBody(prop,value){const body=getFrameDoc().body; if(!body)return; setStyle(body,prop,value); if(selectedElement===body)syncSheetControls(body)}
+function updateShadow(){
+  if(!selectedElement)return;
+  const x=document.getElementById('shadowX').value,y=document.getElementById('shadowY').value,b=document.getElementById('shadowBlur').value;
+  setStyle(selectedElement,'boxShadow',`${x}px ${y}px ${b}px rgba(0,0,0,0.15)`);
+}
+
+function generateCSS(){
+  const doc=getFrameDoc(); const rules=[];
+  doc.querySelectorAll('*').forEach(el=>{
+    if(el.style.length>0){
+      rules.push(`${getUniqueSelector(el)} {\n${Array.from(el.style).map(p=>`  ${p}: ${el.style.getPropertyValue(p)};`).join('\n')}\n}`);
+    }
+  });
+  return `/*\n * STYLEME MC88 — generated CSS\n * To connect this to your HTML, add inside <head>:\n * <link rel="stylesheet" href="styleme-export.css">\n * Copyright: mohamed005cheikh@gmail.com | by MC88\n */\n\n${rules.join('\n\n')}`;
+}
+function downloadCSS(){
+  const css=generateCSS(); const blob=new Blob([css],{type:'text/css;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='styleme-export.css'; a.click();
+  showToast('CSS file downloaded ✅','ok');
+}
+
+function openImportPrompt(){
+  const code=prompt('📋 Paste your HTML here:');
+  if(code!==null) loadCustomHtml(code||'');
+}
+function loadCustomHtml(code){
+  const clean=sanitizeHTML(code||''); const doc=getFrameDoc();
+  doc.open();
+  doc.write(`<!DOCTYPE html><html><head><style>*{box-sizing:border-box}body{font-family:'Inter',sans-serif;margin:0;padding:20px;color:#0f172a}</style></head><body>${clean}</body></html>`);
+  doc.close();
+  injectAnimations(doc); assignAllIds(doc); attachInspector(doc); hideBBox(); selectedElement=null;
+  showToast('HTML loaded ✅','ok');
+}
+
+function scheduleAutosave(){
+  clearTimeout(autosaveTimer);
+  autosaveTimer=setTimeout(()=>{
+    try{
+      const doc=getFrameDoc(); const map={};
+      doc.querySelectorAll('[data-sm-id]').forEach(el=>{if(el.style.length>0)map[el.getAttribute('data-sm-id')]=el.style.cssText});
+      localStorage.setItem('styleme_mc88_state',JSON.stringify(map));
+    }catch(e){}
+  },400);
+}
+function restoreAutosave(doc){
+  try{
+    const raw=localStorage.getItem('styleme_mc88_state'); if(!raw)return;
+    const map=JSON.parse(raw);
+    Object.keys(map).forEach(id=>{const el=doc.querySelector('[data-sm-id="'+id+'"]'); if(el)el.style.cssText=map[id]});
+  }catch(e){}
+}
+
+function showToast(msg,type){
+  const c=document.getElementById('toastContainer'); const el=document.createElement('div');
+  el.className='toast '+(type==='ok'?'ok':'info'); el.textContent=msg; c.appendChild(el);
+  setTimeout(()=>{el.style.opacity='0'; setTimeout(()=>el.remove(),300)},2400);
+}
+function rgb2hex(rgb){
+  if(!rgb||rgb==='transparent'||rgb==='rgba(0, 0, 0, 0)')return '#ffffff';
+  const m=rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/); if(!m)return '#000000';
+  return '#'+[1,2,3].map(i=>parseInt(m[i]).toString(16).padStart(2,'0')).join('');
+}
+function applyAnimation(id){if(!selectedElement)return; setStyle(selectedElement,'animation',`${id} 1s ease`); showToast('Animation applied: '+id,'ok')}
+function removeAnimation(){if(!selectedElement)return; setStyle(selectedElement,'animation',''); showToast('Animation removed','info')}
+
+function openSheet(id){
+  if(!selectedElement&&id!=='pageSheet'&&id!=='guideSheet'){showToast('Select an element first','info');return}
+  if(selectedElement)syncSheetControls(selectedElement);
+  document.getElementById(id).classList.add('active'); document.getElementById('overlay').classList.add('active');
+}
+function closeSheet(){document.querySelectorAll('.sheet').forEach(s=>s.classList.remove('active')); document.getElementById('overlay').classList.remove('active')}
+
+function renderAnimations(){document.getElementById('animationsGrid').innerHTML=animations.map(a=>`<div class="anim-card" onclick="applyAnimation('${a.id}')">${a.icon}<br>${a.name}</div>`).join('')}
+
+window.addEventListener('load',()=>{
+  buildDemoSite();
+  document.getElementById('quickSwatches').innerHTML=quickColors.map(c=>`<div class="swatch" style="background:${c}" onclick="document.getElementById('bgColorPicker').value='${c}'; applyStyleDirect('backgroundColor','${c}')"></div>`).join('');
+  renderAnimations(); closeSheet();
+});
+window.addEventListener('resize',()=>{if(selectedElement)updateBBox(selectedElement)});
+
+window.applyStyleDirect=applyStyleDirect; window.updateShadow=updateShadow; window.applyToBody=applyToBody;
+window.applyAnimation=applyAnimation; window.removeAnimation=removeAnimation; window.undo=undo;
+window.downloadCSS=downloadCSS; window.openSheet=openSheet; window.closeSheet=closeSheet; window.openImportPrompt=openImportPrompt;
+})();
+</script>
+</body>
+</html>
