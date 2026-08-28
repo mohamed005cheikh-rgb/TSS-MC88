@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="htmlRoot">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<title>TFT MC88 — Turn Text Into HTML</title>
+<meta name="description" content="Write plain text, get clean HTML. No coding required.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ===================== TOKENS ===================== */
+:root{
+  --ink:#0a0c12; --ink-2:#0f1320; --paper:#f6efe2;
+  --glass:rgba(255,255,255,.045); --glass-2:rgba(255,255,255,.075); --glass-hover:rgba(255,255,255,.11);
+  --border:rgba(255,255,255,.09); --border-lite:rgba(255,255,255,.15);
+  --ribbon:#e8a33d; --ribbon-hi:#f3b95e; --ribbon-glow:rgba(232,163,61,.28);
+  --teal:#4fd1b8; --teal-hi:#6ee6cc;
+  --danger:#ef6f6f;
+  --text:#f3efe6; --text-dim:#a9a29a; --text-faint:#736c64;
+  --radius-l:22px; --radius-m:14px; --radius-s:9px; --radius-pill:999px;
+  --shadow:0 20px 60px rgba(0,0,0,.45);
+  --shadow-sm:0 8px 24px rgba(0,0,0,.3);
+  --ease:cubic-bezier(.22,1,.36,1);
+  --f-display:'Fraunces',serif; --f-body:'Inter',system-ui,sans-serif; --f-mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--f-body); background:var(--ink); color:var(--text);
+  min-height:100vh; overflow-x:hidden;
+  background-image:
+    radial-gradient(ellipse 700px 500px at 12% -8%, rgba(232,163,61,.10), transparent 60%),
+    radial-gradient(ellipse 800px 600px at 100% 10%, rgba(79,209,184,.07), transparent 55%),
+    repeating-linear-gradient(180deg, rgba(255,255,255,.012) 0px, rgba(255,255,255,.012) 1px, transparent 1px, transparent 3px);
+}
+::selection{background:var(--ribbon-glow);color:var(--text)}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-thumb{background:var(--border-lite);border-radius:10px}
+
+.glass{
+  background:var(--glass); backdrop-filter:blur(22px) saturate(1.5);
+  -webkit-backdrop-filter:blur(22px) saturate(1.5);
+  border:1px solid var(--border); box-shadow:var(--shadow-sm);
+}
+
+/* ===================== TOPBAR ===================== */
+.topbar{
+  position:sticky; top:0; z-index:200; margin:10px 10px 0;
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding:10px 14px; border-radius:var(--radius-pill);
+}
+.brand{display:flex; align-items:center; gap:10px; min-width:0}
+.brand-mark{
+  width:36px; height:36px; border-radius:11px; flex-shrink:0;
+  background:linear-gradient(150deg,var(--ribbon),#c97a1f);
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--f-display); font-weight:700; font-size:16px; color:var(--ink);
+  box-shadow:0 6px 18px var(--ribbon-glow);
+}
+.brand-name{font-family:var(--f-display); font-weight:600; font-size:1.05rem; letter-spacing:.2px; line-height:1.1}
+.brand-tag{font-size:.62rem; color:var(--text-faint); letter-spacing:.4px}
+.top-actions{display:flex; align-items:center; gap:6px}
+
+.btn{
+  display:inline-flex; align-items:center; gap:6px; white-space:nowrap;
+  padding:9px 14px; border-radius:var(--radius-pill); border:1px solid var(--border);
+  background:var(--glass-2); color:var(--text); font-family:var(--f-body); font-weight:600;
+  font-size:.78rem; cursor:pointer; transition:transform .2s var(--ease),background .2s,border-color .2s,box-shadow .2s;
+}
+.btn:hover{background:var(--glass-hover); transform:translateY(-1px)}
+.btn:active{transform:scale(.96)}
+.btn-ghost{background:transparent}
+.btn-ribbon{background:var(--ribbon); color:#241300; border-color:var(--ribbon)}
+.btn-ribbon:hover{background:var(--ribbon-hi); box-shadow:0 0 26px var(--ribbon-glow)}
+.btn-teal{background:var(--teal); color:#062420; border-color:var(--teal)}
+.btn-teal:hover{background:var(--teal-hi); box-shadow:0 0 26px rgba(79,209,184,.3)}
+.btn-outline{background:transparent; border-color:var(--border-lite)}
+.btn-outline:hover{background:var(--glass)}
+.btn-danger{background:transparent; border-color:rgba(239,111,111,.4); color:var(--danger)}
+.btn-danger:hover{background:rgba(239,111,111,.12)}
+.btn-icon{width:38px; height:38px; padding:0; justify-content:center; border-radius:50%}
+.btn sup{font-size:.55rem; opacity:.7}
+
+/* ===================== HERO ===================== */
+.hero{padding:34px 18px 18px; max-width:1100px; margin:0 auto; text-align:center}
+.hero-eyebrow{
+  display:inline-flex; align-items:center; gap:8px; font-family:var(--f-mono); font-size:.68rem;
+  color:var(--ribbon-hi); letter-spacing:.5px; padding:6px 14px; border-radius:var(--radius-pill);
+  border:1px solid rgba(232,163,61,.3); background:rgba(232,163,61,.06); margin-bottom:18px;
+}
+.hero h1{
+  font-family:var(--f-display); font-weight:600; font-size:clamp(1.8rem,6vw,3rem);
+  line-height:1.12; letter-spacing:-.5px; max-width:16ch; margin:0 auto 14px;
+}
+.hero h1 em{font-style:italic; color:var(--ribbon-hi)}
+.hero p{color:var(--text-dim); max-width:52ch; margin:0 auto; font-size:.95rem; line-height:1.65}
+
+/* ===================== TOOLBAR ===================== */
+.toolbar{
+  display:flex; gap:6px; overflow-x:auto; padding:10px 12px; margin:16px 12px 0;
+  border-radius:var(--radius-l); scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
+}
+.tool{
+  flex:0 0 auto; scroll-snap-align:start; display:flex; align-items:center; gap:5px;
+  padding:8px 13px; border-radius:var(--radius-pill); border:1px solid var(--border);
+  background:var(--glass-2); color:var(--text); font-size:.72rem; font-weight:600; cursor:pointer;
+  transition:.2s var(--ease); white-space:nowrap; font-family:var(--f-body);
+}
+.tool:hover{border-color:var(--ribbon); color:var(--ribbon-hi)}
+.tool:active{transform:scale(.94)}
+
+/* ===================== WORKSPACE ===================== */
+.workspace{
+  display:grid; grid-template-columns:1fr; gap:12px; padding:12px; max-width:1400px; margin:0 auto;
+}
+@media(min-width:920px){ .workspace{grid-template-columns:1fr 1fr} }
+
+.pane{
+  border-radius:var(--radius-l); padding:14px 14px 16px; display:flex; flex-direction:column; min-height:0;
+}
+.pane-head{
+  display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; gap:8px; flex-wrap:wrap;
+}
+.pane-title{font-size:.72rem; color:var(--text-dim); font-weight:600; letter-spacing:.3px; display:flex; align-items:center; gap:6px}
+.pane-stats{display:flex; gap:6px}
+.pane-stats span{
+  font-family:var(--f-mono); font-size:.62rem; color:var(--text-faint); background:var(--glass);
+  border:1px solid var(--border); padding:3px 9px; border-radius:var(--radius-pill);
+}
+
+#editor{
+  flex:1; min-height:260px; resize:none; outline:none; background:rgba(0,0,0,.22);
+  border:1px solid var(--border); border-radius:var(--radius-m); color:var(--text);
+  font-family:var(--f-body); font-size:15px; line-height:1.85; padding:16px 17px;
+  transition:.25s var(--ease);
+}
+#editor:focus{border-color:var(--ribbon); box-shadow:0 0 0 4px var(--ribbon-glow)}
+#editor::placeholder{color:var(--text-faint)}
+
+.frame-wrap{flex:1; min-height:260px; border-radius:var(--radius-m); overflow:hidden; background:var(--paper); box-shadow:inset 0 0 0 1px var(--border)}
+#previewFrame{width:100%; height:100%; border:none; min-height:260px; display:block}
+
+/* ===================== NEXT STEPS STRIP ===================== */
+.next-strip{max-width:1400px; margin:8px 12px 0; padding:0}
+.next-grid{display:grid; grid-template-columns:1fr; gap:10px}
+@media(min-width:760px){.next-grid{grid-template-columns:1fr 1fr}}
+.next-card{
+  border-radius:var(--radius-l); padding:20px; display:flex; align-items:center; gap:14px;
+  cursor:pointer; transition:.25s var(--ease); text-decoration:none; color:var(--text);
+}
+.next-card:hover{transform:translateY(-3px); border-color:var(--border-lite)}
+.next-ic{width:46px; height:46px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.3rem; flex-shrink:0}
+.next-ic.style{background:linear-gradient(150deg,#8b5cf6,#ec4899)}
+.next-ic.script{background:linear-gradient(150deg,#34d399,#0891b2)}
+.next-t{font-weight:700; font-size:.92rem; margin-bottom:2px}
+.next-d{font-size:.76rem; color:var(--text-dim); line-height:1.4}
+.next-arrow{margin-inline-start:auto; opacity:.5; font-size:1.1rem}
+
+/* ===================== MODAL ===================== */
+.modal{
+  position:fixed; inset:0; z-index:1000; display:none; align-items:flex-end; justify-content:center;
+  background:rgba(4,5,9,.72); backdrop-filter:blur(10px); padding:0;
+}
+.modal.active{display:flex}
+@media(min-width:640px){.modal{align-items:center; padding:20px}}
+.modal-card{
+  width:100%; max-width:560px; max-height:88vh; overflow-y:auto;
+  background:var(--ink-2); border:1px solid var(--border-lite); border-radius:24px 24px 0 0;
+  box-shadow:0 -20px 70px rgba(0,0,0,.6); padding:22px 20px calc(24px + env(safe-area-inset-bottom));
+  animation:sheetIn .4s var(--ease);
+}
+@media(min-width:640px){.modal-card{border-radius:22px; animation:modalIn .35s var(--ease)}}
+@keyframes sheetIn{from{transform:translateY(60px); opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes modalIn{from{transform:scale(.94) translateY(20px); opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+.modal-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; padding-bottom:14px; border-bottom:1px solid var(--border)}
+.modal-head h3{font-family:var(--f-display); font-weight:600; color:var(--ribbon-hi); font-size:1.15rem; display:flex; align-items:center; gap:8px}
+.modal-close{background:none; border:none; color:var(--text-dim); font-size:1.5rem; cursor:pointer; line-height:1; padding:2px 6px; border-radius:8px; transition:.2s}
+.modal-close:hover{color:var(--text); background:var(--glass)}
+
+.step{padding:12px 0; border-bottom:1px solid var(--border); display:flex; gap:12px}
+.step:last-child{border-bottom:none}
+.step-num{
+  flex-shrink:0; width:26px; height:26px; border-radius:50%; background:var(--glass-2); border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center; font-family:var(--f-mono); font-size:.72rem; color:var(--ribbon-hi); font-weight:600;
+}
+.step-title{font-weight:700; font-size:.86rem; margin-bottom:3px}
+.step-desc{font-size:.79rem; color:var(--text-dim); line-height:1.6}
+.step-code{
+  display:inline-block; margin-top:6px; font-family:var(--f-mono); font-size:.72rem; color:var(--teal-hi);
+  background:rgba(0,0,0,.3); border:1px solid var(--border); padding:3px 10px; border-radius:6px;
+}
+
+/* ===================== TOAST ===================== */
+.toast{
+  position:fixed; bottom:22px; left:50%; transform:translateX(-50%) translateY(14px); z-index:2000;
+  background:var(--ink-2); border:1px solid var(--border-lite); color:var(--text); padding:11px 22px;
+  border-radius:var(--radius-pill); font-size:.82rem; font-weight:600; opacity:0; pointer-events:none;
+  transition:.4s var(--ease); box-shadow:var(--shadow); display:flex; align-items:center; gap:8px;
+}
+.toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+
+/* ===================== FOOTER ===================== */
+footer{
+  max-width:1400px; margin:26px auto 18px; padding:16px 18px; text-align:center;
+  font-size:.68rem; color:var(--text-faint); letter-spacing:.2px;
+}
+footer a{color:var(--text-faint); text-decoration:none; transition:.2s}
+footer a:hover{color:var(--ribbon-hi)}
+footer .fam{margin-top:8px; display:flex; gap:14px; justify-content:center; flex-wrap:wrap}
+footer .fam a{font-weight:600; color:var(--text-dim)}
+
+@media(max-width:640px){
+  .top-actions .btn-label{display:none}
+  .hero{padding:22px 14px 10px}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar glass">
+  <div class="brand">
+    <div class="brand-mark">T</div>
+    <div>
+      <div class="brand-name">TFT <span style="color:var(--text-faint);font-weight:500">MC88</span></div>
+      <div class="brand-tag">TEXT → HTML</div>
+    </div>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn-outline" onclick="toggleModal('guideModal',true)">📖 <span class="btn-label">Guide</span></button>
+    <button class="btn btn-danger btn-icon" onclick="clearEditor()" title="Clear">🗑️</button>
+    <button class="btn btn-outline btn-icon" onclick="copyHTML()" title="Copy HTML">📋</button>
+    <button class="btn btn-teal" onclick="exportHTML()">💾 <span class="btn-label">Download</span></button>
+  </div>
+</header>
+
+<section class="hero">
+  <span class="hero-eyebrow">● NO CODING KNOWLEDGE NEEDED</span>
+  <h1>Turn plain <em>text</em> into real HTML.</h1>
+  <p>Type or paste your text, highlight it, tap a style — TFT MC88 writes the HTML for you. See it live, then download a ready-to-use file.</p>
+</section>
+
+<div class="toolbar glass" id="toolbarScroll">
+  <button class="tool" onclick="convertSelected('h1')">📌 Heading</button>
+  <button class="tool" onclick="convertSelected('h2')">📌 Subheading</button>
+  <button class="tool" onclick="convertSelected('p')">📄 Paragraph</button>
+  <button class="tool" onclick="convertSelected('strong')">◼ Bold</button>
+  <button class="tool" onclick="convertSelected('em')">◻ Italic</button>
+  <button class="tool" onclick="convertSelected('ul')">☰ List item</button>
+  <button class="tool" onclick="convertSelected('blockquote')">❝ Quote</button>
+  <button class="tool" onclick="insertTemplate('[link text](https://)')">🔗 Link</button>
+  <button class="tool" onclick="insertTemplate('![alt text](image.jpg)')">🖼️ Image</button>
+  <button class="tool" onclick="insertTemplate('[button: Click here].')">◉ Button</button>
+  <button class="tool" onclick="insertTemplate('@{video}(video.mp4)')">▶ Video</button>
+  <button class="tool" onclick="insertTemplate('#{audio}(audio.mp3)')">♪ Audio</button>
+  <button class="tool" onclick="insertTemplate('\n---\n')">— Divider</button>
+</div>
+
+<div class="workspace">
+  <div class="pane glass">
+    <div class="pane-head">
+      <span class="pane-title">✏️ Write here</span>
+      <div class="pane-stats"><span id="charCount">0 chars</span><span id="wordCount">0 words</span></div>
+    </div>
+    <textarea id="editor" spellcheck="false" placeholder="Start typing… Select any text, then tap a tool above to format it.">Welcome to TFT MC88 ⚡
+
+Select this text and tap a tool above to try it instantly!
+You can also insert links, images, buttons, video and audio easily.</textarea>
+  </div>
+
+  <div class="pane glass">
+    <div class="pane-head">
+      <span class="pane-title">👁️ Live preview</span>
+      <span class="pane-title" id="previewStats">Ready</span>
+    </div>
+    <div class="frame-wrap"><iframe id="previewFrame" title="Live preview"></iframe></div>
+  </div>
+</div>
+
+<div class="next-strip">
+  <div class="next-grid">
+    <a class="next-card glass" href="styleme-mc88.html">
+      <div class="next-ic style">🎨</div>
+      <div><div class="next-t">Style your page next</div><div class="next-d">Open STYLEME MC88 to design colors, effects and animations visually.</div></div>
+      <div class="next-arrow">→</div>
+    </a>
+    <a class="next-card glass" href="scriptme-mc88.html">
+      <div class="next-ic script">⚙️</div>
+      <div><div class="next-t">Add real features</div><div class="next-d">Open SCRIPTME MC88 for ready-made menus, sliders and effects.</div></div>
+      <div class="next-arrow">→</div>
+    </a>
+  </div>
+</div>
+
+<!-- GUIDE MODAL -->
+<div class="modal" id="guideModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3>📖 How to use TFT MC88</h3>
+      <button class="modal-close" onclick="toggleModal('guideModal',false)">✕</button>
+    </div>
+    <div class="step"><div class="step-num">1</div><div><div class="step-title">Write your text</div><div class="step-desc">Type anything in the left box, just like a normal note.</div></div></div>
+    <div class="step"><div class="step-num">2</div><div><div class="step-title">Select it</div><div class="step-desc">Highlight the part you want to format.</div></div></div>
+    <div class="step"><div class="step-num">3</div><div><div class="step-title">Tap a tool</div><div class="step-desc">Choose Heading, Bold, List, Quote… from the toolbar.</div><div class="step-code">"Hello" → Heading → becomes a title</div></div></div>
+    <div class="step"><div class="step-num">4</div><div><div class="step-title">Watch the preview</div><div class="step-desc">The right panel updates instantly — that's exactly how it will look.</div></div></div>
+    <div class="step"><div class="step-num">5</div><div><div class="step-title">Export it</div><div class="step-desc">Tap "Copy" to copy the raw HTML, or "Download" to save a ready .html file.</div></div></div>
+    <div class="step"><div class="step-num">6</div><div><div class="step-title">Open the downloaded file</div><div class="step-desc">Find it in your device's "Downloads" folder and tap it — it opens straight in your browser. You can rename it anything, e.g. <b>index.html</b>.</div></div></div>
+    <div class="step"><div class="step-num">7</div><div><div class="step-title">Use it in a real project</div><div class="step-desc">Move the file into your website folder. Want it styled or made interactive? Open it next in STYLEME MC88 or SCRIPTME MC88.</div></div></div>
+    <button class="btn btn-ribbon" style="width:100%; justify-content:center; margin-top:8px" onclick="toggleModal('guideModal',false)">Got it ✅</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer>
+  <div>Copyright: mohamed005cheikh@gmail.com | by MC88</div>
+  <div class="fam">
+    <span>TFT MC88</span>
+    <a href="styleme-mc88.html">STYLEME MC88</a>
+    <a href="scriptme-mc88.html">SCRIPTME MC88</a>
+  </div>
+</footer>
+
+<script>
+const editor=document.getElementById('editor'), previewFrame=document.getElementById('previewFrame'), toast=document.getElementById('toast');
+let toastTimer=null;
+
+function toggleModal(id,show){
+  const m=document.getElementById(id);
+  m.classList.toggle('active',show);
+  document.body.style.overflow=show?'hidden':'';
+}
+document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)toggleModal(m.id,false)}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal.active').forEach(m=>toggleModal(m.id,false))});
+
+function showToast(msg){
+  toast.textContent=msg; toast.classList.add('show');
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>toast.classList.remove('show'),2400);
+}
+
+function convertSelected(tag){
+  const start=editor.selectionStart, end=editor.selectionEnd, selected=editor.value.substring(start,end);
+  if(!selected){ showToast('⚠️ Select some text first'); return; }
+  const clean=selected.replace(/^(\+{1,2}|\.|'|-|>)\s*/,'').replace(/\s*\.\.?$/,'');
+  let wrapped='';
+  switch(tag){
+    case 'h1': wrapped=`\n+ ${clean}.\n`; break;
+    case 'h2': wrapped=`\n++ ${clean}.\n`; break;
+    case 'p': wrapped=`\n. ${clean}.\n`; break;
+    case 'strong': wrapped=`'${clean}'`; break;
+    case 'em': wrapped=`''${clean}''`; break;
+    case 'ul': wrapped=`\n- ${clean}.\n`; break;
+    case 'blockquote': wrapped=`\n> ${clean}..\n`; break;
+    default: wrapped=`<${tag}>${clean}</${tag}>`;
+  }
+  editor.value=editor.value.substring(0,start)+wrapped+editor.value.substring(end);
+  editor.focus(); editor.selectionStart=editor.selectionEnd=start+wrapped.length;
+  renderPreview(); showToast('✅ Applied');
+}
+
+function insertTemplate(tpl){
+  const start=editor.selectionStart;
+  editor.value=editor.value.substring(0,start)+tpl+editor.value.substring(start);
+  editor.focus(); editor.selectionStart=editor.selectionEnd=start+tpl.length;
+  renderPreview(); showToast('✅ Inserted');
+}
+
+function clearEditor(){
+  if(confirm('Clear all content?')){ editor.value=''; renderPreview(); showToast('🗑️ Cleared'); }
+}
+
+function parseToHTML(input){
+  let html=input;
+  html=html.replace(/^\+\s+(.*?)\./gm,'<h1>$1</h1>');
+  html=html.replace(/^\+\+\s+(.*?)\./gm,'<h2>$1</h2>');
+  html=html.replace(/^\.\s+(.*?)\./gm,'<p>$1</p>');
+  html=html.replace(/'([^']+)'/g,'<strong>$1</strong>');
+  html=html.replace(/''([^']+)''/g,'<em>$1</em>');
+  html=html.replace(/^-\s+(.*?)\./gm,'<ul><li>$1</li></ul>');
+  html=html.replace(/^>\s+(.*?)\.\./gm,'<blockquote>$1</blockquote>');
+  html=html.replace(/!\[(.*?)\]\((.*?)\)/g,'<img src="$2" alt="$1" style="max-width:100%;border-radius:8px;margin:8px 0;">');
+  html=html.replace(/\[(.*?)\]\((.*?)\)/g,'<a href="$2" target="_blank" style="color:#2563eb;text-decoration:none;">$1</a>');
+  html=html.replace(/\[button:\s*(.*?)\]\./g,'<button style="background:#0f172a;color:#fff;border:none;padding:10px 24px;border-radius:30px;cursor:pointer;font-weight:600;">$1</button>');
+  html=html.replace(/@\{([^}]*)\}\(([^)]*)\)/g,'<video src="$2" controls style="width:100%;border-radius:8px;margin:8px 0;">$1</video>');
+  html=html.replace(/#\{([^}]*)\}\(([^)]*)\)/g,'<audio src="$2" controls style="width:100%;border-radius:8px;margin:8px 0;">$1</audio>');
+  html=html.replace(/^---\s*$/gm,'<hr style="border:2px dashed #cbd5e1;margin:24px 0;">');
+  html=html.replace(/<\/ul>\s*<ul>/g,'');
+  html=html.replace(/<p>\s*<\/p>/g,'');
+  return html;
+}
+
+function renderPreview(){
+  const text=editor.value, parsed=parseToHTML(text);
+  const doc=previewFrame.contentDocument||previewFrame.contentWindow.document;
+  doc.open();
+  doc.write(`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body{font-family:'Inter',system-ui,sans-serif;padding:24px;line-height:1.8;color:#1e293b;max-width:720px;margin:0 auto;background:#fff}
+    h1{color:#0f172a;border-bottom:2px solid #e9eef2;padding-bottom:8px}
+    h2{color:#1e293b;margin-top:24px} p{margin:8px 0}
+    blockquote{border-left:4px solid #2563eb;background:#f8fafc;padding:12px 20px;margin:16px 0;border-radius:8px}
+    img{max-width:100%;border-radius:8px;margin:8px 0}
+    button{background:#0f172a;color:#fff;border:none;padding:10px 24px;border-radius:30px;cursor:pointer;font-weight:600}
+    audio,video{width:100%;border-radius:8px;margin:8px 0}
+    ul{margin:12px 0;padding-left:24px} li{margin:4px 0}
+    a{color:#2563eb;text-decoration:none} hr{border:none;border-top:2px dashed #cbd5e1;margin:24px 0}
+  </style></head><body>${parsed}</body></html>`);
+  doc.close();
+  updateStats(text);
+}
+
+function updateStats(text){
+  const clean=text.replace(/[+\-.'`>]/g,'').replace(/\s+/g,' ');
+  const words=clean.trim()?clean.trim().split(/\s+/).length:0;
+  document.getElementById('charCount').textContent=`${text.length} chars`;
+  document.getElementById('wordCount').textContent=`${words} words`;
+}
+
+function exportHTML(){
+  const parsed=parseToHTML(editor.value);
+  const fullDoc=`<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Page — made with TFT MC88</title>
+<style>
+body{font-family:'Inter',system-ui,sans-serif;max-width:720px;margin:40px auto;padding:24px;line-height:1.8;color:#1e293b}
+h1{color:#0f172a;border-bottom:2px solid #e9eef2;padding-bottom:8px}
+h2{color:#1e293b;margin-top:24px}
+blockquote{border-left:4px solid #2563eb;background:#f8fafc;padding:12px 20px;margin:16px 0;border-radius:8px}
+img{max-width:100%;border-radius:8px;margin:8px 0}
+button{background:#0f172a;color:#fff;border:none;padding:10px 24px;border-radius:30px;cursor:pointer;font-weight:600}
+audio,video{width:100%;border-radius:8px;margin:8px 0}
+ul{margin:12px 0;padding-left:24px}
+a{color:#2563eb;text-decoration:none}
+hr{border:none;border-top:2px dashed #cbd5e1;margin:24px 0}
+</style>
+</head>
+<body>
+${parsed}
+<!-- Copyright: mohamed005cheikh@gmail.com | by MC88 -->
+</body>
+</html>`;
+  const blob=new Blob([fullDoc],{type:'text/html;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download=`my-page-${Date.now()}.html`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  showToast('💾 File downloaded');
+}
+
+function copyHTML(){
+  const parsed=parseToHTML(editor.value);
+  navigator.clipboard.writeText(parsed).then(()=>showToast('📋 HTML copied')).catch(()=>{
+    const ta=document.createElement('textarea'); ta.value=parsed; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+    showToast('📋 HTML copied');
+  });
+}
+
+editor.addEventListener('input',renderPreview);
+renderPreview();
+</script>
+</body>
+</html>
