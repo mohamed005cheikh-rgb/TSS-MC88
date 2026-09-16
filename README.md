@@ -1,147 +1,103 @@
-# 🧰 MC88 Web Tools — Suite de création de sites sans code
+<div align="center">
 
-Trois outils 100 % gratuits, légers et **sans aucune installation** pour créer des pages web complètes sans écrire une seule ligne de code.  
-Tous les outils fonctionnent **entièrement dans votre navigateur** (aucun serveur, aucune connexion Internet après le premier chargement).
+# 🧰 MC88 Web Tools
 
----
+**Créez des sites web complets, sans écrire une seule ligne de code.**
 
-## 📦 Contenu du dépôt
-
-| Fichier | Description |
-|---------|-------------|
-| `tft-mc88.html` | Transforme du texte brut en HTML sémantique propre. |
-| `styleme-mc88.html` | Permet de styliser visuellement n'importe quel élément HTML (CSS généré automatiquement). |
-| `scriptme-mc88.html` | Bibliothèque de fonctionnalités JavaScript prêtes à l'emploi (menus, sliders, popups…). |
+</div>
 
 ---
 
-## 🚀 Démarrage rapide
+## 👋 Bienvenue
 
-1. **Téléchargez** les trois fichiers `.html` dans un même dossier sur votre ordinateur.
-2. **Double-cliquez** sur le fichier souhaité pour l'ouvrir dans votre navigateur.
-   - Pas besoin d'Internet, pas de serveur, pas de compilation.
-3. Utilisez les outils dans l'ordre recommandé :
-   1. **TFT MC88** → écrivez votre contenu et exportez le HTML.
-   2. **STYLEME MC88** → importez ce HTML et personnalisez les couleurs, effets, textes.
-   3. **SCRIPTME MC88** → ajoutez des interactions (menu, modale, slider…) en copiant ou téléchargeant le code.
+Trois outils simples, gratuits, et légers — pensés pour vous permettre de créer un site web de A à Z, sans jamais toucher à la programmation.
+
+Vous écrivez votre contenu, vous choisissez son apparence, vous ajoutez des interactions. Et à la fin, vous avez une vraie page HTML, prête à mettre en ligne.
+
+Tout se passe dans votre navigateur. Pas d'installation, pas de compte à créer, pas de serveur à configurer. Vous ouvrez le fichier, vous travaillez, et vous repartez avec votre site.
 
 ---
 
-## 🧩 TFT MC88 — Texte → HTML
+## 📸 Un aperçu
 
-### Objectif
-Écrire du contenu de manière simple, puis obtenir un fichier HTML prêt à l'emploi.
+<div align="center">
+  <img src="https://github.com/mohamed005cheikh-rgb/doctools-mc88/raw/main/images/Sc1.png" alt="TFT MC88 — Texte vers HTML" width="100%" />
+</div>
 
-### Utilisation
-1. **Tapez ou collez** votre texte dans la zone de gauche.
-2. **Sélectionnez** un morceau de texte.
-3. **Cliquez sur un outil** dans la barre supérieure :
-   - Titre, sous‑titre, paragraphe
-   - Gras, italique
-   - Liste, citation
-   - Lien, image, bouton, vidéo, audio, séparateur
-4. Le **panneau de droite** affiche l'aperçu en temps réel.
-5. **Exportez** :
-   - bouton **Copier** → copie le HTML brut
-   - bouton **Télécharger** → enregistre un fichier `.html` complet
+<br />
 
-> 💡 **Astuce** : le fichier téléchargé peut être renommé `index.html` et déposé tel quel sur un hébergeur.
+<div align="center">
+  <img src="https://github.com/mohamed005cheikh-rgb/doctools-mc88/raw/main/images/Sc2.png" alt="STYLEME MC88 — Studio CSS visuel" width="100%" />
+</div>
 
----
+<br />
 
-## 🎨 STYLEME MC88 — Studio CSS visuel
+<div align="center">
+  <img src="https://github.com/mohamed005cheikh-rgb/doctools-mc88/raw/main/images/Sr1.gif" alt="Écrire du contenu et l'exporter en HTML" width="100%" />
+</div>
 
-### Objectif
-Donner du style à une page HTML existante (ou créée avec TFT) sans écrire de CSS.
+<br />
 
-### Utilisation
-1. **Ouvrez** `styleme-mc88.html`.
-2. Une page de démonstration s'affiche déjà.
-   - Pour importer **votre propre HTML**, cliquez sur **« Import »** et collez‑le.
-3. **Cliquez sur n'importe quel élément** dans l'aperçu (titre, bouton, carte…).
-   - Un cadre violet apparaît autour de l'élément sélectionné.
-4. Utilisez les **panneaux du bas** pour modifier :
-   - **Couleur** : palette rapide, couleur de fond, couleur de texte
-   - **Effets** : arrondi, ombre portée, opacité, animations (15 effets)
-   - **Texte** : taille, graisse, alignement
-   - **Page** : fond, couleur de texte, espacement global
-5. **Exportez** le CSS généré :
-   - Bouton **« Export »** → télécharge `styleme-export.css`
-   - Liez ce fichier à votre HTML avec `<link rel="stylesheet" href="styleme-export.css">`
-
-> ✅ Chaque élément reçoit automatiquement un identifiant unique pour éviter les conflits.
+<div align="center">
+  <img src="https://github.com/mohamed005cheikh-rgb/doctools-mc88/raw/main/images/Sr2.gif" alt="Styliser un élément en un clic" width="100%" />
+</div>
 
 ---
 
-## ⚙️ SCRIPTME MC88 — Bibliothèque de fonctionnalités JavaScript
+## ✨ Ce que vous trouverez
 
-### Objectif
-Ajouter des interactions prêtes à l'emploi à votre site, sans connaître JavaScript.
+**TFT MC88 — Écrire devient du HTML.**  
+Vous tapez votre texte comme dans un document. Vous sélectionnez un morceau, vous cliquez sur « Titre », « Paragraphe », « Image » ou « Lien » — et l'outil se charge de produire le code HTML propre. Un aperçu s'affiche en direct à côté, et vous pouvez copier ou télécharger le résultat.
 
-### Utilisation
-1. **Ouvrez** `scriptme-mc88.html`.
-2. Parcourez les **14 fonctionnalités** classées par catégories :
-   - Navigation (menu mobile, défilement fluide, retour en haut)
-   - Contenu (onglets, accordéon, slider d'images)
-   - Interaction (popup, mode sombre, copie presse‑papiers, validation de formulaire)
-   - Feedback (compteur animé, apparition au défilement, notifications toast, effet machine à écrire)
-3. **Cliquez sur une carte** pour ouvrir le détail :
-   - **Aperçu en direct** de la fonctionnalité
-   - Onglets **HTML / CSS / JS** avec le code complet
-   - Onglet **« How to use »** expliquant en français simple où coller chaque partie
-4. **Copiez** le code ou **téléchargez** un fichier HTML autonome de la fonctionnalité.
+**STYLEME MC88 — Un studio visuel pour l'apparence.**  
+Vous importez votre page, puis vous cliquez simplement sur les éléments qui vous intéressent. Couleurs, arrondis, ombres, animations, taille du texte — vous ajustez tout visuellement, et l'outil génère le CSS correspondant. Pas besoin de comprendre ce qui se passe en coulisses.
 
-> 🔧 Chaque fonctionnalité est autonome : il suffit de coller le HTML, le CSS et le JS aux bons endroits de votre page.
+**SCRIPTME MC88 — Des interactions prêtes à l'emploi.**  
+Menu mobile, fenêtres popup, sliders d'images, mode sombre, compteurs animés, formulaires validés… Quatorze fonctionnalités vous attendent, chacune accompagnée d'un aperçu, du code complet, et d'une explication simple de où le coller.
+
+**Tout reste chez vous.**  
+Ces outils ne font appel à aucun serveur. Ils ne vous demandent rien, ne collectent rien, et n'ont besoin d'Internet que la première fois. Une fois les fichiers sur votre ordinateur, vous êtes autonome.
 
 ---
 
-## 🔗 Les trois outils ensemble
+## 🧭 Comment créer votre site
 
-1. **TFT MC88** → générez le contenu et la structure.
-2. **STYLEME MC88** → importez le HTML de TFT et personnalisez l'apparence.
-3. **SCRIPTME MC88** → choisissez une fonctionnalité (ex. menu mobile) et collez son code dans la page stylée.
+Un chemin simple, en trois temps :
 
-Le résultat est un site complet, responsive et moderne, sans aucune connaissance en programmation.
+1. **Écrivez** votre contenu avec TFT — c'est votre point de départ. À la fin, téléchargez votre page HTML.
+2. **Personnalisez** son apparence avec STYLEME — importez la page, cliquez sur les éléments, ajustez, exportez le CSS.
+3. **Ajoutez des interactions** avec SCRIPTME — choisissez ce qui vous plaît, copiez le code dans votre page, et admirez le résultat.
 
----
-
-## 🛠️ Dépannage
-
-### Problème 1 : Les fichiers ne s'ouvrent pas
-- **Cause** : certains navigateurs bloquent les fichiers locaux.
-- **Solution** : double‑cliquez à nouveau, ou faites un clic droit → « Ouvrir avec » → choisissez Chrome, Edge, Firefox ou Safari.
-
-### Problème 2 : Le bouton « Copier » ne fonctionne pas
-- **Cause** : l'API presse‑papiers peut être bloquée en mode local.
-- **Solution** : utilisez le bouton « Télécharger » à la place, ou ouvrez la page via un petit serveur local (par exemple avec l'extension VS Code « Live Server »).
-
-### Problème 3 : STYLEME n'importe pas mon HTML
-- **Cause** : le HTML contient des scripts ou des attributs non sécurisés.
-- **Solution** : collez uniquement le contenu du `<body>` (sans les balises `<script>`). STYLEME supprime automatiquement les éléments dangereux.
-
-### Problème 4 : Les modifications de STYLEME ne sont pas sauvegardées
-- **Cause** : le stockage local est désactivé ou la navigation privée est active.
-- **Solution** : utilisez la navigation normale, ou exportez régulièrement votre CSS.
-
-### Problème 5 : SCRIPTME affiche une erreur dans l'aperçu
-- **Cause** : certaines fonctionnalités nécessitent un navigateur moderne.
-- **Solution** : mettez à jour votre navigateur, ou testez une autre fonctionnalité.
+À la fin, vous avez un site complet, moderne, qui fonctionne aussi bien sur téléphone que sur ordinateur — sans avoir écrit une seule ligne de code.
 
 ---
 
-## 📄 Copyright
+## 🧰 Petits coups de main
 
-**© 2026**  
-📧 mohamed005cheikh@gmail.com  
-Créé par **MC88**  
-Tous droits réservés.
+**Les fichiers ne s'ouvrent pas ?**  
+Faites un clic droit, puis choisissez « Ouvrir avec » et sélectionnez votre navigateur habituel.
+
+**Un bouton ne répond pas ?**  
+Utilisez le bouton « Télécharger » à la place de « Copier » — c'est parfois plus fiable quand on travaille en local.
+
+**Un aperçu ne s'affiche pas ?**  
+Essayez avec un navigateur à jour — certains outils utilisent des fonctionnalités modernes.
+
+Si quelque chose cloche malgré tout, écrivez-moi. Je réponds vite.
 
 ---
 
-## 🔗 Fichiers associés
+<div align="center">
 
-- `tft-mc88.html` — lien direct (si hébergé)
-- `styleme-mc88.html` — lien direct
-- `scriptme-mc88.html` — lien direct
+### 📞 Une question, une idée ?
 
-**Bonne création ! 🚀**
+[![Email](https://img.shields.io/badge/Email-mohamed005cheikh@gmail.com-d14836?style=flat-square&logo=gmail&logoColor=white)](mailto:mohamed005cheikh@gmail.com)
+[![WhatsApp](https://img.shields.io/badge/WhatsApp-+222_30_72_64_75-25D366?style=flat-square&logo=whatsapp&logoColor=white)](https://wa.me/22230726475)
+
+<br />
+
+*Bonne création.*
+
+<sub>© 2026 Mohamed Cheikh — MC88</sub>
+
+</div>
