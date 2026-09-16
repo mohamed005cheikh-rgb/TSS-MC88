@@ -17,7 +17,7 @@ Vous écrivez votre contenu, vous choisissez son apparence, vous ajoutez des int
 Tout se passe dans votre navigateur. Pas d'installation, pas de compte à créer, pas de serveur à configurer. Vous ouvrez le fichier, vous travaillez, et vous repartez avec votre site.
 
 ---
-
+<!-- 
 ## 📸 Un aperçu
 
 <div align="center">
@@ -42,7 +42,7 @@ Tout se passe dans votre navigateur. Pas d'installation, pas de compte à créer
   <img src="https://github.com/mohamed005cheikh-rgb/doctools-mc88/raw/main/images/Sr2.gif" alt="Styliser un élément en un clic" width="100%" />
 </div>
 
----
+----->
 
 ## ✨ Ce que vous trouverez
 
